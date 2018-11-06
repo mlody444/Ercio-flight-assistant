@@ -1,3 +1,5 @@
 Taki testowy teœcik
 
 Tutaj druga linijka testowa
+
+Obs³uga przycisków (zbugowana)
