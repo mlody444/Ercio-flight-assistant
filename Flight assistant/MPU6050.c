@@ -18,8 +18,9 @@
 void CalibrateMPU6050(float * dest1, float * dest2)
 {
 	uint8_t data[12]; // data array to hold accelerometer and gyro x, y, z, data
-	uint16_t ii, packet_count, fifo_count;
+	uint16_t ii, jj, packet_count, packet_total, fifo_count;
 	int32_t gyro_bias[3] = {0, 0, 0}, accel_bias[3] = {0, 0, 0};
+	packet_total = 0;
 
 	// reset device, reset all registers, clear gyro and accelerometer bias registers
 	I2C_write_byte(MPU6050_ADDRESS, PWR_MGMT_1, 0x80); // Write a one to bit 7 reset bit; toggle reset device
@@ -52,37 +53,40 @@ void CalibrateMPU6050(float * dest1, float * dest2)
 	// Configure FIFO to capture accelerometer and gyro data for bias calculation
 	I2C_write_byte(MPU6050_ADDRESS, USER_CTRL, 0x40);   // Enable FIFO
 	I2C_write_byte(MPU6050_ADDRESS, FIFO_EN, 0x78);     // Enable gyro and accelerometer sensors for FIFO  (max size 1024 bytes in MPU-6050)
-	_delay_ms(80); // accumulate 80 samples in 80 milliseconds = 960 bytes
-
-	// At end of sample accumulation, turn off FIFO sensor read
-	I2C_write_byte(MPU6050_ADDRESS, FIFO_EN, 0x00);        // Disable gyro and accelerometer sensors for FIFO
-	I2C_read_buf(MPU6050_ADDRESS, FIFO_COUNTH, 2, &data[0]); // read FIFO sample count
-	fifo_count = ((uint16_t)data[0] << 8) | data[1];
 	
-	SendStringUint("data[0]    = ", data[0]);
-	SendStringUint("data[0]<<8 = ", data[0]<<8);
-	SendStringUint("data[1]    = ", data[1]);
+	for (jj = 0; jj < 20; jj++)	//read samples for 1 second
+	{
+		_delay_ms(32); // accumulate 50 samples in 50 milliseconds = 600 bytes
+		// At end of sample accumulation, turn off FIFO sensor read
+		if (jj == 19)	// Disable gyro and accelerometer sensors for FIFO
+			I2C_write_byte(MPU6050_ADDRESS, FIFO_EN, 0x00);
+		I2C_read_buf(MPU6050_ADDRESS, FIFO_COUNTH, 2, &data[0]); // read FIFO sample count
+		fifo_count = ((uint16_t)data[0] << 8) | data[1];
 
-	packet_count = fifo_count/12;// How many sets of full gyro and accelerometer data for averaging
-	SendStringUint("Packet count = ", packet_count);
+		packet_count = fifo_count/12;// How many sets of full gyro and accelerometer data for averaging
 
-	for (ii = 0; ii < packet_count; ii++) {
-		int16_t accel_temp[3] = {0, 0, 0}, gyro_temp[3] = {0, 0, 0};
-		I2C_read_buf(MPU6050_ADDRESS, FIFO_R_W, 12, &data[0]); // read data for averaging
-		accel_temp[0] = (int16_t) (((int16_t)data[0] << 8) | data[1]  ) ;  // Form signed 16-bit integer for each sample in FIFO
-		accel_temp[1] = (int16_t) (((int16_t)data[2] << 8) | data[3]  ) ;
-		accel_temp[2] = (int16_t) (((int16_t)data[4] << 8) | data[5]  ) ;
-		gyro_temp[0]  = (int16_t) (((int16_t)data[6] << 8) | data[7]  ) ;
-		gyro_temp[1]  = (int16_t) (((int16_t)data[8] << 8) | data[9]  ) ;
-		gyro_temp[2]  = (int16_t) (((int16_t)data[10] << 8) | data[11]) ;
+		for (ii = 0; ii < packet_count; ii++) {
+			packet_total++;
+
+			int16_t accel_temp[3] = {0, 0, 0}, gyro_temp[3] = {0, 0, 0};
+			I2C_read_buf(MPU6050_ADDRESS, FIFO_R_W, 12, &data[0]); // read data for averaging
+			accel_temp[0] = (int16_t) (((int16_t)data[0] << 8)  | data[1] ) ;  // Form signed 16-bit integer for each sample in FIFO
+			accel_temp[1] = (int16_t) (((int16_t)data[2] << 8)  | data[3] ) ;
+			accel_temp[2] = (int16_t) (((int16_t)data[4] << 8)  | data[5] ) ;
+			gyro_temp[0]  = (int16_t) (((int16_t)data[6] << 8)  | data[7] ) ;
+			gyro_temp[1]  = (int16_t) (((int16_t)data[8] << 8)  | data[9] ) ;
+			gyro_temp[2]  = (int16_t) (((int16_t)data[10] << 8) | data[11]) ;
 		
-		accel_bias[0] += (int32_t) accel_temp[0]; // Sum individual signed 16-bit biases to get accumulated signed 32-bit biases
-		accel_bias[1] += (int32_t) accel_temp[1];
-		accel_bias[2] += (int32_t) accel_temp[2];
-		gyro_bias[0]  += (int32_t) gyro_temp[0];
-		gyro_bias[1]  += (int32_t) gyro_temp[1];
-		gyro_bias[2]  += (int32_t) gyro_temp[2];
+			accel_bias[0] += (int32_t) accel_temp[0]; // Sum individual signed 16-bit biases to get accumulated signed 32-bit biases
+			accel_bias[1] += (int32_t) accel_temp[1];
+			accel_bias[2] += (int32_t) accel_temp[2];
+			gyro_bias[0]  += (int32_t) gyro_temp[0];
+			gyro_bias[1]  += (int32_t) gyro_temp[1];
+			gyro_bias[2]  += (int32_t) gyro_temp[2];
+		}
 	}
+
+	SendStringInt("Total packets recieved = ", packet_total);
 
 	accel_bias[0] /= (int32_t) packet_count; // Normalize sums to get average count biases
 	accel_bias[1] /= (int32_t) packet_count;
