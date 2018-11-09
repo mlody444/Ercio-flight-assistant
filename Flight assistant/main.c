@@ -104,7 +104,6 @@ int main(void)
     while (1) 
     {
 		CheckRxBuffor();
-		I2C_read_buf(MPU6050_ADDRESS, FIFO_R_W, 12, &data[0]); // read data for averaging
 		I2C_read_buf(MPU6050_ADDRESS, FIFO_COUNTH, 2, &data[0]); // read FIFO sample count
 		fifo_count = ((uint16_t)data[0] << 8) | data[1];
 		packet_count = fifo_count/12;// How many sets of full gyro and accelerometer data for averaging
