@@ -9,7 +9,7 @@
 #ifndef MPU6050_H_
 #define MPU6050_H_
 
-void CalibrateMPU6050(float * dest1, float * dest2);
+void CalibrateMPU6050(int16_t gyro_offset[], int16_t acc_offset[]);
 
 
 

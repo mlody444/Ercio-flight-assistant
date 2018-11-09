@@ -14,7 +14,8 @@ main.d main.o: .././main.c \
  d:\atmel\atmel\ studio\ 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\interrupt.h \
  d:\atmel\atmel\ studio\ 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\util\delay.h \
  d:\atmel\atmel\ studio\ 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\util\delay_basic.h \
- .././Uart.h .././i2c_twi.h .././twi_buf_pos.h .././MPU6050.h
+ .././Uart.h .././i2c_twi.h .././twi_buf_pos.h .././MPU6050.h \
+ .././MPU6050_registers.h
 
 d:\atmel\atmel\ studio\ 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\io.h:
 
@@ -53,3 +54,5 @@ d:\atmel\atmel\ studio\ 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\ut
 .././twi_buf_pos.h:
 
 .././MPU6050.h:
+
+.././MPU6050_registers.h:
