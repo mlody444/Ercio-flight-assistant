@@ -131,12 +131,15 @@ int8_t er_buf(char * params)
 			sum[Y_AXIS] += bufor[Y_AXIS][i];
 			sum[Z_AXIS] += bufor[Z_AXIS][i];
 		}
-// 	 	SendStringInt("G X ", bufor[0]);
-// 	 	SendStringInt("G Y ", bufor[1]);
-// 	 	SendStringInt("G Z ", bufor[2]);
+
+		sum[X_AXIS] /= (int16_t) samples;
+		sum[Y_AXIS] /= (int16_t) samples;
+		sum[Z_AXIS] /= (int16_t) samples;
+
+ 	 	SendStringInt("G X ", sum[0]);
+ 	 	SendStringInt("G Y ", sum[1]);
+ 	 	SendStringInt("G Z ", sum[2]);
 	}
-	SendEnter();
-	SendStringUint("Samples gyro= ", samples);
 
  	samples = SamplesAccBuf();
  	if (samples != 0)
@@ -152,11 +155,15 @@ int8_t er_buf(char * params)
 			sum[Y_AXIS] += bufor[Y_AXIS][i];
 			sum[Z_AXIS] += bufor[Z_AXIS][i];
 		}
-// 		SendStringInt("A X ", bufor[0]);
-// 		SendStringInt("A Y ", bufor[1]);
-// 		SendStringInt("A Z ", bufor[2]);
- 	}
-	SendStringUint("Samples acc = ", samples);
 
+		sum[X_AXIS] /= (int16_t) samples;
+		sum[Y_AXIS] /= (int16_t) samples;
+		sum[Z_AXIS] /= (int16_t) samples;
+		SendStringInt("A X ", sum[0]);
+		SendStringInt("A Y ", sum[1]);
+		SendStringInt("A Z ", sum[2]);
+ 	}
+
+	SendStringInt("S ", samples);
 	return 0;
 }
