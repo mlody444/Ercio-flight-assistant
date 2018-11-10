@@ -15,14 +15,19 @@
 #include "Uart.h"
 #include "Uart_HW.h"
 #include "RecieveCommands.h"
+#include "Common.h"
 
-#define RX_COMMANDS 1	//number of rX commands
+#define RX_COMMANDS 3	//number of rX commands
 
 int8_t er_service(char * params);
+int8_t er_read(char * params);
+int8_t er_buf(char * params);
 
 
 const ER_CMD ER_commands [RX_COMMANDS] PROGMEM = {
 	{"ER", er_service},
+	{"ER_READ", er_read},
+	{"ER_BUF", er_buf},
 };
 
 
@@ -85,5 +90,73 @@ void ProcessString(uint8_t start, uint8_t stop)
 int8_t er_service(char * params)
 {
 	SendLine("Uart is working");
+	return 0;
+}
+
+int8_t er_read(char * params)
+{
+	int16_t gyro[3];
+	int16_t acc[3];
+	
+	ReadGyroSample(gyro);
+	ReadAccSample(acc);
+
+	SendStringInt("G X ", gyro[0]);
+	SendStringInt("G Y ", gyro[1]);
+	SendStringInt("G Z ", gyro[2]);
+	SendStringInt("A X ", acc[0]);
+	SendStringInt("A Y ", acc[1]);
+	SendStringInt("A Z ", acc[2]);
+
+	return 0;
+}
+
+int8_t er_buf(char * params)
+{
+	int16_t bufor[3][SAMPLES_BUFF_SIZE];
+	int32_t sum[3];
+	uint8_t i, samples;	
+
+	samples = SamplesGyroBuf();
+	if (samples != 0)
+	{
+		ReadGyroBuf(bufor, &samples);
+		sum[0] = 0;
+		sum[1] = 0;
+		sum[2] = 0;
+
+		for(i = 0; i < samples; i++)
+		{
+			sum[X_AXIS] += bufor[X_AXIS][i];
+			sum[Y_AXIS] += bufor[Y_AXIS][i];
+			sum[Z_AXIS] += bufor[Z_AXIS][i];
+		}
+// 	 	SendStringInt("G X ", bufor[0]);
+// 	 	SendStringInt("G Y ", bufor[1]);
+// 	 	SendStringInt("G Z ", bufor[2]);
+	}
+	SendEnter();
+	SendStringUint("Samples gyro= ", samples);
+
+ 	samples = SamplesAccBuf();
+ 	if (samples != 0)
+ 	{
+		ReadAccBuf(bufor, &samples);
+		sum[0] = 0;
+		sum[1] = 0;
+		sum[2] = 0;
+ 
+		for(i = 0; i < samples; i++)
+		{
+			sum[X_AXIS] += bufor[X_AXIS][i];
+			sum[Y_AXIS] += bufor[Y_AXIS][i];
+			sum[Z_AXIS] += bufor[Z_AXIS][i];
+		}
+// 		SendStringInt("A X ", bufor[0]);
+// 		SendStringInt("A Y ", bufor[1]);
+// 		SendStringInt("A Z ", bufor[2]);
+ 	}
+	SendStringUint("Samples acc = ", samples);
+
 	return 0;
 }

@@ -2,6 +2,8 @@
 # Automatically-generated file. Do not edit or delete the file
 ################################################################################
 
+Common.c
+
 i2c_twi.c
 
 main.c

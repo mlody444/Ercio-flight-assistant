@@ -135,7 +135,7 @@ void InitMPU6050(void)
 
 	// Configure MPU6050 gyro and accelerometer for bias calculation
 	I2C_write_byte(MPU6050_ADDRESS, CONFIG, 0x03);      // Set low-pass filter to 44 Hz
-	I2C_write_byte(MPU6050_ADDRESS, SMPLRT_DIV, 20);  // Set sample rate to 50 Hz
+	I2C_write_byte(MPU6050_ADDRESS, SMPLRT_DIV, 5);  // Set sample rate to 1000 Hz
 	I2C_write_byte(MPU6050_ADDRESS, GYRO_CONFIG, 0x00);  // Set gyro full-scale to 250 degrees per second, maximum sensitivity
 	I2C_write_byte(MPU6050_ADDRESS, ACCEL_CONFIG, 0x00); // Set accelerometer full-scale to 2 g, maximum sensitivity
 
@@ -147,6 +147,8 @@ void ReadMPU6050(void)
 {
 	uint8_t i, fifo_count, packet_count;
 	uint8_t data[12];
+	int16_t gyro[3];
+	int16_t acc[3];
 
 	I2C_read_buf(MPU6050_ADDRESS, FIFO_COUNTH, 2, &data[0]); // read FIFO sample count
 	fifo_count = ((uint16_t)data[0] << 8) | data[1];
@@ -169,11 +171,7 @@ void ReadMPU6050(void)
 		gyro[1] -= gyro_offset[1];
 		gyro[2] -= gyro_offset[2];
 
-		SendStringInt("Gyro X ", gyro[0]);
-		SendStringInt("Gyro Y ", gyro[1]);
-		SendStringInt("Gyro Z ", gyro[2]);
-		SendStringInt("Acc X ", acc[0]);
-		SendStringInt("Acc Y ", acc[1]);
-		SendStringInt("Acc Z ", acc[2]);
+		PlaceInGyroBuffor(gyro);
+		PlaceInAccBuffor(acc);
 	}
 }

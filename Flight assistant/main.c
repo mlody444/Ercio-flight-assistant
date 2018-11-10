@@ -23,7 +23,6 @@
 #define LED_OFF PORTB &= ~(1<<PB5)
 #define LED_TGL PORTB ^=  (1<<PB5)
 
-uint8_t test;
 
 int main(void)
 {
@@ -38,9 +37,7 @@ int main(void)
 
 	InitUartCOM();
 	sei();
-
 	SendLine("Uart dziala");
-	SendStringUint("Wartoœæ = ", test);
 
 	CalibrateMPU6050(gyro_offset, acc_offset);
 	InitMPU6050();
@@ -51,4 +48,3 @@ int main(void)
 		ReadMPU6050();
     }
 }
-
