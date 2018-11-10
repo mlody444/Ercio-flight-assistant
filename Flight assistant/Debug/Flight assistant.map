@@ -26,10 +26,14 @@ d:/atmel/atmel studio 7.1/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/a
 Allocating common symbols
 Common symbol       size              file
 
+acc                 0x6               main.o
+gyro                0x6               main.o
 test                0x1               main.o
+acc_offset          0x6               main.o
 twi_reset_counter   0x1               twi_buf_pos.o
 RxBuffor            0x20              Uart.o
 twi_command         0x2               twi_buf_pos.o
+gyro_offset         0x6               main.o
 twi_buf_pos         0x1               twi_buf_pos.o
 TxBuffor            0x80              Uart.o
 twi_bufor           0xa0              twi_buf_pos.o
@@ -43,6 +47,8 @@ Discarded input sections
  .bss           0x00000000        0x0 i2c_twi.o
  .text.I2C_write_buf
                 0x00000000       0x5a i2c_twi.o
+ .text.I2C_read_byte
+                0x00000000       0x3a i2c_twi.o
  .text          0x00000000        0x0 main.o
  .data          0x00000000        0x0 main.o
  .bss           0x00000000        0x0 main.o
@@ -349,7 +355,7 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000     0x1494
+.text           0x00000000     0x1586
  *(.vectors)
  .vectors       0x00000000       0xb4 D:/Atmel/Atmel Studio 7.1/7.0/Packs/atmel/ATmega_DFP/1.2.150/gcc/dev/atmega328pb/avr5/crtatmega328pb.o
                 0x00000000                __vector_default
@@ -472,98 +478,98 @@ END GROUP
  .text.I2C_write_byte
                 0x00000172       0x30 i2c_twi.o
                 0x00000172                I2C_write_byte
- .text.I2C_read_byte
-                0x000001a2       0x3a i2c_twi.o
-                0x000001a2                I2C_read_byte
  .text.I2C_read_buf
-                0x000001dc       0x70 i2c_twi.o
-                0x000001dc                I2C_read_buf
- .text.InitMPU6050
-                0x0000024c       0xc8 main.o
-                0x0000024c                InitMPU6050
- .text.main     0x00000314      0x182 main.o
-                0x00000314                main
+                0x000001a2       0x70 i2c_twi.o
+                0x000001a2                I2C_read_buf
+ .text.main     0x00000212       0x4a main.o
+                0x00000212                main
  .text.CalibrateMPU6050
-                0x00000496      0x464 MPU6050.o
-                0x00000496                CalibrateMPU6050
+                0x0000025c      0x464 MPU6050.o
+                0x0000025c                CalibrateMPU6050
+ .text.InitMPU6050
+                0x000006c0      0x122 MPU6050.o
+                0x000006c0                InitMPU6050
+ .text.ReadMPU6050
+                0x000007e2      0x20a MPU6050.o
+                0x000007e2                ReadMPU6050
  .text.er_service
-                0x000008fa        0xc RecieveCommands.o
-                0x000008fa                er_service
+                0x000009ec        0xc RecieveCommands.o
+                0x000009ec                er_service
  .text.ProcessString
-                0x00000906       0xe0 RecieveCommands.o
-                0x00000906                ProcessString
+                0x000009f8       0xe0 RecieveCommands.o
+                0x000009f8                ProcessString
  .text.__vector_24
-                0x000009e6      0x438 twi_buf_pos.o
-                0x000009e6                __vector_24
+                0x00000ad8      0x438 twi_buf_pos.o
+                0x00000ad8                __vector_24
  .text.InitUartCOM
-                0x00000e1e        0x6 Uart.o
-                0x00000e1e                InitUartCOM
+                0x00000f10        0x6 Uart.o
+                0x00000f10                InitUartCOM
  .text.ReceiveChar
-                0x00000e24       0x2a Uart.o
-                0x00000e24                ReceiveChar
+                0x00000f16       0x2a Uart.o
+                0x00000f16                ReceiveChar
  .text.SendString
-                0x00000e4e       0x2c Uart.o
-                0x00000e4e                SendString
+                0x00000f40       0x2c Uart.o
+                0x00000f40                SendString
  .text.SendEnter
-                0x00000e7a        0xe Uart.o
-                0x00000e7a                SendEnter
+                0x00000f6c        0xe Uart.o
+                0x00000f6c                SendEnter
  .text.SendLine
-                0x00000e88        0xa Uart.o
-                0x00000e88                SendLine
- .text.SendInt  0x00000e92      0x1e2 Uart.o
-                0x00000e92                SendInt
+                0x00000f7a        0xa Uart.o
+                0x00000f7a                SendLine
+ .text.SendInt  0x00000f84      0x1e2 Uart.o
+                0x00000f84                SendInt
  .text.SendStringInt
-                0x00001074       0x26 Uart.o
-                0x00001074                SendStringInt
+                0x00001166       0x26 Uart.o
+                0x00001166                SendStringInt
  .text.SendUint
-                0x0000109a      0x15e Uart.o
-                0x0000109a                SendUint
+                0x0000118c      0x15e Uart.o
+                0x0000118c                SendUint
  .text.SendStringUint
-                0x000011f8       0x1a Uart.o
-                0x000011f8                SendStringUint
+                0x000012ea       0x1a Uart.o
+                0x000012ea                SendStringUint
  .text.CheckRxBuffor
-                0x00001212       0x5c Uart.o
-                0x00001212                CheckRxBuffor
+                0x00001304       0x5c Uart.o
+                0x00001304                CheckRxBuffor
  .text.InitUartCOM_HW
-                0x0000126e       0x14 Uart_HW.o
-                0x0000126e                InitUartCOM_HW
+                0x00001360       0x14 Uart_HW.o
+                0x00001360                InitUartCOM_HW
  .text.PutCharToBuffor
-                0x00001282       0x34 Uart_HW.o
-                0x00001282                PutCharToBuffor
+                0x00001374       0x34 Uart_HW.o
+                0x00001374                PutCharToBuffor
  .text.__vector_20
-                0x000012b6       0x52 Uart_HW.o
-                0x000012b6                __vector_20
+                0x000013a8       0x52 Uart_HW.o
+                0x000013a8                __vector_20
  .text.__vector_18
-                0x00001308       0x4c Uart_HW.o
-                0x00001308                __vector_18
+                0x000013fa       0x4c Uart_HW.o
+                0x000013fa                __vector_18
  .text.libgcc.div
-                0x00001354       0x2e d:/atmel/atmel studio 7.1/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_divmodsi4.o)
-                0x00001354                __divmodsi4
+                0x00001446       0x2e d:/atmel/atmel studio 7.1/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_divmodsi4.o)
+                0x00001446                __divmodsi4
  .text.libgcc.div
-                0x00001382       0x10 d:/atmel/atmel studio 7.1/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_negsi2.o)
-                0x00001382                __negsi2
- .text.libgcc   0x00001392        0xc d:/atmel/atmel studio 7.1/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_tablejump2.o)
-                0x00001392                __tablejump2__
+                0x00001474       0x10 d:/atmel/atmel studio 7.1/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_negsi2.o)
+                0x00001474                __negsi2
+ .text.libgcc   0x00001484        0xc d:/atmel/atmel studio 7.1/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_tablejump2.o)
+                0x00001484                __tablejump2__
  .text.libgcc.mul
-                0x0000139e       0x1e d:/atmel/atmel studio 7.1/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_umulhisi3.o)
-                0x0000139e                __umulhisi3
+                0x00001490       0x1e d:/atmel/atmel studio 7.1/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_umulhisi3.o)
+                0x00001490                __umulhisi3
  .text.libgcc.div
-                0x000013bc       0x44 d:/atmel/atmel studio 7.1/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_udivmodsi4.o)
-                0x000013bc                __udivmodsi4
+                0x000014ae       0x44 d:/atmel/atmel studio 7.1/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_udivmodsi4.o)
+                0x000014ae                __udivmodsi4
  .text.avr-libc
-                0x00001400       0x12 d:/atmel/atmel studio 7.1/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libc.a(strlen_P.o)
-                0x00001400                __strlen_P
+                0x000014f2       0x12 d:/atmel/atmel studio 7.1/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libc.a(strlen_P.o)
+                0x000014f2                __strlen_P
  .text.avr-libc
-                0x00001412       0x30 d:/atmel/atmel studio 7.1/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libc.a(strncasecmp_P.o)
-                0x00001412                strncasecmp_P
+                0x00001504       0x30 d:/atmel/atmel studio 7.1/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libc.a(strncasecmp_P.o)
+                0x00001504                strncasecmp_P
  .text.avr-libc
-                0x00001442       0x4e d:/atmel/atmel studio 7.1/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libc.a(strtok_r.o)
-                0x00001442                strtok_r
-                0x00001490                . = ALIGN (0x2)
+                0x00001534       0x4e d:/atmel/atmel studio 7.1/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr5\libc.a(strtok_r.o)
+                0x00001534                strtok_r
+                0x00001582                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x00001490        0x0 d:/atmel/atmel studio 7.1/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
-                0x00001490                _exit
-                0x00001490                exit
+ .fini9         0x00001582        0x0 d:/atmel/atmel studio 7.1/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
+                0x00001582                _exit
+                0x00001582                exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -582,11 +588,11 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x00001490        0x4 d:/atmel/atmel studio 7.1/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
+ .fini0         0x00001582        0x4 d:/atmel/atmel studio 7.1/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr5\libgcc.a(_exit.o)
  *(.fini0)
-                0x00001494                _etext = .
+                0x00001586                _etext = .
 
-.data           0x00800100       0x64 load address 0x00001494
+.data           0x00800100       0x64 load address 0x00001586
                 0x00800100                PROVIDE (__data_start, .)
  *(.data)
  *(.data*)
@@ -594,7 +600,9 @@ END GROUP
  *(.rodata)
  *(.rodata*)
  .rodata.str1.1
-                0x00800100       0x44 main.o
+                0x00800100       0x17 main.o
+ .rodata.str1.1
+                0x00800117       0x2d MPU6050.o
  .rodata.str1.1
                 0x00800144       0x20 RecieveCommands.o
                                  0x22 (size before relaxing)
@@ -603,7 +611,7 @@ END GROUP
                 0x00800164                _edata = .
                 0x00800164                PROVIDE (__data_end, .)
 
-.bss            0x00800164      0x149
+.bss            0x00800164      0x161
                 0x00800164                PROVIDE (__bss_start, .)
  *(.bss)
  *(.bss*)
@@ -616,25 +624,29 @@ END GROUP
  .bss.RxTail    0x00800167        0x1 Uart.o
                 0x00800167                RxTail
  *(COMMON)
- COMMON         0x00800168        0x1 main.o
-                0x00800168                test
- COMMON         0x00800169       0xa4 twi_buf_pos.o
-                0x00800169                twi_reset_counter
-                0x0080016a                twi_command
-                0x0080016c                twi_buf_pos
-                0x0080016d                twi_bufor
- COMMON         0x0080020d       0xa0 Uart.o
-                0x0080020d                RxBuffor
-                0x0080022d                TxBuffor
-                0x008002ad                PROVIDE (__bss_end, .)
-                0x00001494                __data_load_start = LOADADDR (.data)
-                0x000014f8                __data_load_end = (__data_load_start + SIZEOF (.data))
+ COMMON         0x00800168       0x19 main.o
+                0x00800168                acc
+                0x0080016e                gyro
+                0x00800174                test
+                0x00800175                acc_offset
+                0x0080017b                gyro_offset
+ COMMON         0x00800181       0xa4 twi_buf_pos.o
+                0x00800181                twi_reset_counter
+                0x00800182                twi_command
+                0x00800184                twi_buf_pos
+                0x00800185                twi_bufor
+ COMMON         0x00800225       0xa0 Uart.o
+                0x00800225                RxBuffor
+                0x00800245                TxBuffor
+                0x008002c5                PROVIDE (__bss_end, .)
+                0x00001586                __data_load_start = LOADADDR (.data)
+                0x000015ea                __data_load_end = (__data_load_start + SIZEOF (.data))
 
-.noinit         0x008002ad        0x0
+.noinit         0x008002c5        0x0
                 [!provide]                PROVIDE (__noinit_start, .)
  *(.noinit*)
                 [!provide]                PROVIDE (__noinit_end, .)
-                0x008002ad                _end = .
+                0x008002c5                _end = .
                 [!provide]                PROVIDE (__heap_start, .)
 
 .eeprom         0x00810000        0x0
@@ -705,96 +717,95 @@ END GROUP
 .debug_sfnames
  *(.debug_sfnames)
 
-.debug_aranges  0x00000000      0x1f8
+.debug_aranges  0x00000000      0x200
  *(.debug_aranges)
  .debug_aranges
                 0x00000000       0x58 i2c_twi.o
  .debug_aranges
-                0x00000058       0x28 main.o
+                0x00000058       0x20 main.o
  .debug_aranges
-                0x00000080       0x20 MPU6050.o
+                0x00000078       0x30 MPU6050.o
  .debug_aranges
-                0x000000a0       0x28 RecieveCommands.o
+                0x000000a8       0x28 RecieveCommands.o
  .debug_aranges
-                0x000000c8       0x80 twi_buf_pos.o
+                0x000000d0       0x80 twi_buf_pos.o
  .debug_aranges
-                0x00000148       0x70 Uart.o
+                0x00000150       0x70 Uart.o
  .debug_aranges
-                0x000001b8       0x40 Uart_HW.o
+                0x000001c0       0x40 Uart_HW.o
 
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000     0x2bf8
+.debug_info     0x00000000     0x2cca
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000      0x8ea D:/Atmel/Atmel Studio 7.1/7.0/Packs/atmel/ATmega_DFP/1.2.150/gcc/dev/atmega328pb/avr5/crtatmega328pb.o
  .debug_info    0x000008ea      0x394 i2c_twi.o
- .debug_info    0x00000c7e      0x691 main.o
- .debug_info    0x0000130f      0x6b1 MPU6050.o
- .debug_info    0x000019c0      0x3a7 RecieveCommands.o
- .debug_info    0x00001d67      0x732 twi_buf_pos.o
- .debug_info    0x00002499      0x5e8 Uart.o
- .debug_info    0x00002a81      0x177 Uart_HW.o
+ .debug_info    0x00000c7e      0x20b main.o
+ .debug_info    0x00000e89      0xc09 MPU6050.o
+ .debug_info    0x00001a92      0x3a7 RecieveCommands.o
+ .debug_info    0x00001e39      0x732 twi_buf_pos.o
+ .debug_info    0x0000256b      0x5e8 Uart.o
+ .debug_info    0x00002b53      0x177 Uart_HW.o
 
-.debug_abbrev   0x00000000     0x13b0
+.debug_abbrev   0x00000000     0x1366
  *(.debug_abbrev)
  .debug_abbrev  0x00000000      0x86e D:/Atmel/Atmel Studio 7.1/7.0/Packs/atmel/ATmega_DFP/1.2.150/gcc/dev/atmega328pb/avr5/crtatmega328pb.o
  .debug_abbrev  0x0000086e      0x12f i2c_twi.o
- .debug_abbrev  0x0000099d      0x16b main.o
- .debug_abbrev  0x00000b08      0x1aa MPU6050.o
- .debug_abbrev  0x00000cb2      0x1cb RecieveCommands.o
- .debug_abbrev  0x00000e7d      0x28d twi_buf_pos.o
- .debug_abbrev  0x0000110a      0x1b3 Uart.o
- .debug_abbrev  0x000012bd       0xf3 Uart_HW.o
+ .debug_abbrev  0x0000099d       0xe5 main.o
+ .debug_abbrev  0x00000a82      0x1e6 MPU6050.o
+ .debug_abbrev  0x00000c68      0x1cb RecieveCommands.o
+ .debug_abbrev  0x00000e33      0x28d twi_buf_pos.o
+ .debug_abbrev  0x000010c0      0x1b3 Uart.o
+ .debug_abbrev  0x00001273       0xf3 Uart_HW.o
 
-.debug_line     0x00000000     0x14dc
+.debug_line     0x00000000     0x14ec
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000      0x1a5 D:/Atmel/Atmel Studio 7.1/7.0/Packs/atmel/ATmega_DFP/1.2.150/gcc/dev/atmega328pb/avr5/crtatmega328pb.o
  .debug_line    0x000001a5      0x255 i2c_twi.o
- .debug_line    0x000003fa      0x287 main.o
- .debug_line    0x00000681      0x26c MPU6050.o
- .debug_line    0x000008ed      0x235 RecieveCommands.o
- .debug_line    0x00000b22      0x482 twi_buf_pos.o
- .debug_line    0x00000fa4      0x3e0 Uart.o
- .debug_line    0x00001384      0x158 Uart_HW.o
+ .debug_line    0x000003fa      0x104 main.o
+ .debug_line    0x000004fe      0x3ff MPU6050.o
+ .debug_line    0x000008fd      0x235 RecieveCommands.o
+ .debug_line    0x00000b32      0x482 twi_buf_pos.o
+ .debug_line    0x00000fb4      0x3e0 Uart.o
+ .debug_line    0x00001394      0x158 Uart_HW.o
 
-.debug_frame    0x00000000      0x598
+.debug_frame    0x00000000      0x5f0
  *(.debug_frame)
  .debug_frame   0x00000000       0xf0 i2c_twi.o
- .debug_frame   0x000000f0       0x44 main.o
- .debug_frame   0x00000134       0x84 MPU6050.o
- .debug_frame   0x000001b8       0x60 RecieveCommands.o
- .debug_frame   0x00000218      0x13c twi_buf_pos.o
- .debug_frame   0x00000354      0x178 Uart.o
- .debug_frame   0x000004cc       0xcc Uart_HW.o
+ .debug_frame   0x000000f0       0x24 main.o
+ .debug_frame   0x00000114       0xfc MPU6050.o
+ .debug_frame   0x00000210       0x60 RecieveCommands.o
+ .debug_frame   0x00000270      0x13c twi_buf_pos.o
+ .debug_frame   0x000003ac      0x178 Uart.o
+ .debug_frame   0x00000524       0xcc Uart_HW.o
 
-.debug_str      0x00000000      0x9d8
+.debug_str      0x00000000      0x9e4
  *(.debug_str)
  .debug_str     0x00000000      0x318 D:/Atmel/Atmel Studio 7.1/7.0/Packs/atmel/ATmega_DFP/1.2.150/gcc/dev/atmega328pb/avr5/crtatmega328pb.o
  .debug_str     0x00000318      0x1b7 i2c_twi.o
                                 0x1f0 (size before relaxing)
- .debug_str     0x000004cf      0x139 main.o
-                                0x28a (size before relaxing)
- .debug_str     0x00000608       0x67 MPU6050.o
-                                0x284 (size before relaxing)
- .debug_str     0x0000066f       0xdf RecieveCommands.o
+ .debug_str     0x000004cf       0xcb main.o
+                                0x1ed (size before relaxing)
+ .debug_str     0x0000059a       0xe1 MPU6050.o
+                                0x2af (size before relaxing)
+ .debug_str     0x0000067b       0xdf RecieveCommands.o
                                 0x2a4 (size before relaxing)
- .debug_str     0x0000074e      0x1b3 twi_buf_pos.o
+ .debug_str     0x0000075a      0x1b3 twi_buf_pos.o
                                 0x372 (size before relaxing)
- .debug_str     0x00000901       0x9a Uart.o
+ .debug_str     0x0000090d       0x9a Uart.o
                                 0x2ac (size before relaxing)
- .debug_str     0x0000099b       0x3d Uart_HW.o
+ .debug_str     0x000009a7       0x3d Uart_HW.o
                                 0x20f (size before relaxing)
 
-.debug_loc      0x00000000     0x21c9
+.debug_loc      0x00000000     0x20a9
  *(.debug_loc)
  .debug_loc     0x00000000      0x4d6 i2c_twi.o
- .debug_loc     0x000004d6      0x33b main.o
- .debug_loc     0x00000811      0x7e3 MPU6050.o
- .debug_loc     0x00000ff4      0x1c9 RecieveCommands.o
- .debug_loc     0x000011bd      0x599 twi_buf_pos.o
- .debug_loc     0x00001756      0x926 Uart.o
- .debug_loc     0x0000207c      0x14d Uart_HW.o
+ .debug_loc     0x000004d6      0x9fe MPU6050.o
+ .debug_loc     0x00000ed4      0x1c9 RecieveCommands.o
+ .debug_loc     0x0000109d      0x599 twi_buf_pos.o
+ .debug_loc     0x00001636      0x926 Uart.o
+ .debug_loc     0x00001f5c      0x14d Uart_HW.o
 
 .debug_macinfo
  *(.debug_macinfo)
@@ -814,15 +825,15 @@ END GROUP
 .debug_pubtypes
  *(.debug_pubtypes)
 
-.debug_ranges   0x00000000      0x210
+.debug_ranges   0x00000000      0x218
  *(.debug_ranges)
  .debug_ranges  0x00000000       0x48 i2c_twi.o
- .debug_ranges  0x00000048       0x18 main.o
- .debug_ranges  0x00000060       0x40 MPU6050.o
- .debug_ranges  0x000000a0       0x18 RecieveCommands.o
- .debug_ranges  0x000000b8       0x70 twi_buf_pos.o
- .debug_ranges  0x00000128       0xb8 Uart.o
- .debug_ranges  0x000001e0       0x30 Uart_HW.o
+ .debug_ranges  0x00000048       0x10 main.o
+ .debug_ranges  0x00000058       0x50 MPU6050.o
+ .debug_ranges  0x000000a8       0x18 RecieveCommands.o
+ .debug_ranges  0x000000c0       0x70 twi_buf_pos.o
+ .debug_ranges  0x00000130       0xb8 Uart.o
+ .debug_ranges  0x000001e8       0x30 Uart_HW.o
 
 .debug_macro
  *(.debug_macro)

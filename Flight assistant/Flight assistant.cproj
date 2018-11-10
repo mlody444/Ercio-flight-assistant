@@ -136,6 +136,9 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Common.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="i2c_twi.c">
       <SubType>compile</SubType>
     </Compile>
