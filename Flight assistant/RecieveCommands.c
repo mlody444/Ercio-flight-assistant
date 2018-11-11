@@ -11,6 +11,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <util/delay.h>
+#include <math.h>
 
 #include "Uart.h"
 #include "Uart_HW.h"
@@ -132,9 +133,9 @@ int8_t er_buf(char * params)
 			sum[Z_AXIS] += bufor[Z_AXIS][i];
 		}
 
-		sum[X_AXIS] /= (int16_t) samples;
-		sum[Y_AXIS] /= (int16_t) samples;
-		sum[Z_AXIS] /= (int16_t) samples;
+		sum[X_AXIS] /= (int32_t) samples;
+		sum[Y_AXIS] /= (int32_t) samples;
+		sum[Z_AXIS] /= (int32_t) samples;
 
  	 	SendStringInt("G X ", sum[0]);
  	 	SendStringInt("G Y ", sum[1]);
@@ -148,17 +149,19 @@ int8_t er_buf(char * params)
 		sum[0] = 0;
 		sum[1] = 0;
 		sum[2] = 0;
+		uint8_t average = 0;
  
 		for(i = 0; i < samples; i++)
 		{
-			sum[X_AXIS] += bufor[X_AXIS][i];
-			sum[Y_AXIS] += bufor[Y_AXIS][i];
-			sum[Z_AXIS] += bufor[Z_AXIS][i];
+			average += (i+1)*(i+1);
+			sum[X_AXIS] += ((int32_t)bufor[X_AXIS][i] * (i+1)*(i+1));
+			sum[Y_AXIS] += ((int32_t)bufor[Y_AXIS][i] * (i+1)*(i+1));
+			sum[Z_AXIS] += ((int32_t)bufor[Z_AXIS][i] * (i+1)*(i+1));
 		}
 
-		sum[X_AXIS] /= (int16_t) samples;
-		sum[Y_AXIS] /= (int16_t) samples;
-		sum[Z_AXIS] /= (int16_t) samples;
+		sum[X_AXIS] /= (int32_t) average;
+		sum[Y_AXIS] /= (int32_t) average;
+		sum[Z_AXIS] /= (int32_t) average;
 		SendStringInt("A X ", sum[0]);
 		SendStringInt("A Y ", sum[1]);
 		SendStringInt("A Z ", sum[2]);
