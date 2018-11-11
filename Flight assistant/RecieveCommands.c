@@ -114,59 +114,26 @@ int8_t er_read(char * params)
 
 int8_t er_buf(char * params)
 {
-	int16_t bufor[3][SAMPLES_BUFF_SIZE];
-	int32_t sum[3];
-	uint8_t i, samples;	
+	int16_t data[3];
 
-	samples = SamplesGyroBuf();
-	if (samples != 0)
+	if (SamplesGyroBuf())
 	{
-		ReadGyroBuf(bufor, &samples);
-		sum[0] = 0;
-		sum[1] = 0;
-		sum[2] = 0;
+		ReadGyroBufAveraged(data);
 
-		for(i = 0; i < samples; i++)
-		{
-			sum[X_AXIS] += bufor[X_AXIS][i];
-			sum[Y_AXIS] += bufor[Y_AXIS][i];
-			sum[Z_AXIS] += bufor[Z_AXIS][i];
-		}
-
-		sum[X_AXIS] /= (int32_t) samples;
-		sum[Y_AXIS] /= (int32_t) samples;
-		sum[Z_AXIS] /= (int32_t) samples;
-
- 	 	SendStringInt("G X ", sum[0]);
- 	 	SendStringInt("G Y ", sum[1]);
- 	 	SendStringInt("G Z ", sum[2]);
+ 	 	SendStringInt("G X ", data[0]);
+ 	 	SendStringInt("G Y ", data[1]);
+ 	 	SendStringInt("G Z ", data[2]);
 	}
 
- 	samples = SamplesAccBuf();
- 	if (samples != 0)
+ 	if (SamplesAccBuf())
  	{
-		ReadAccBuf(bufor, &samples);
-		sum[0] = 0;
-		sum[1] = 0;
-		sum[2] = 0;
-		uint8_t average = 0;
- 
-		for(i = 0; i < samples; i++)
-		{
-			average += (i+1)*(i+1);
-			sum[X_AXIS] += ((int32_t)bufor[X_AXIS][i] * (i+1)*(i+1));
-			sum[Y_AXIS] += ((int32_t)bufor[Y_AXIS][i] * (i+1)*(i+1));
-			sum[Z_AXIS] += ((int32_t)bufor[Z_AXIS][i] * (i+1)*(i+1));
-		}
+		ReadAccBufAveraged(data);
 
-		sum[X_AXIS] /= (int32_t) average;
-		sum[Y_AXIS] /= (int32_t) average;
-		sum[Z_AXIS] /= (int32_t) average;
-		SendStringInt("A X ", sum[0]);
-		SendStringInt("A Y ", sum[1]);
-		SendStringInt("A Z ", sum[2]);
+		SendStringInt("A X ", data[0]);
+		SendStringInt("A Y ", data[1]);
+		SendStringInt("A Z ", data[2]);
  	}
 
-	SendStringInt("S ", samples);
+	SendStringInt("S ", SamplesAccBuf());
 	return 0;
 }

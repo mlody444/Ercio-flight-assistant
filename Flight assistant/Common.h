@@ -28,8 +28,11 @@ void ReadAccSample(int16_t reading_buf[]);
 uint8_t SamplesGyroBuf();
 uint8_t SamplesAccBuf();
 
+void ReadGyroBuf(int16_t reading_buf[3][SAMPLES_BUFF_SIZE], uint8_t sam_nr);
+void ReadAccBuf( int16_t reading_buf[3][SAMPLES_BUFF_SIZE], uint8_t sam_nr);
 
-void ReadGyroBuf(int16_t reading_buf[3][SAMPLES_BUFF_SIZE], uint8_t * sam_nr);
-void ReadAccBuf( int16_t reading_buf[3][SAMPLES_BUFF_SIZE], uint8_t * sam_nr);
+void AveragingLinearMPU6050(int16_t data[3][SAMPLES_BUFF_SIZE], uint8_t samples, int16_t results[3]);
+void AveragingWeightingMPU6050(int16_t data[3][SAMPLES_BUFF_SIZE], uint8_t samples, int16_t results[3]);
+
 
 #endif /* COMMON_H_ */
