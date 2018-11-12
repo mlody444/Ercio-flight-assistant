@@ -18,6 +18,7 @@
 #include "MPU6050.h"
 #include "MPU6050_registers.h"
 #include "Common.h"
+#include "Timer.h"
 
 #define LED_ON  PORTB |=  (1<<PB5)
 #define LED_OFF PORTB &= ~(1<<PB5)
@@ -39,12 +40,23 @@ int main(void)
 	sei();
 	SendLine("Uart dziala");
 
+	test_counter = 200;
+
 	CalibrateMPU6050(gyro_offset, acc_offset);
+
+	for (uint8_t i=0; i<10; i++){
+		LED_TGL;
+		_delay_ms(100);
+	}
+
 	InitMPU6050();
+
+	InitCommonTimer();
 
     while (1) 
     {
 		CheckRxBuffor();
 		ReadMPU6050();
+		CheckCommonTimer();
     }
 }

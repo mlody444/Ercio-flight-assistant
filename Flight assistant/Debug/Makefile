@@ -42,6 +42,7 @@ C_SRCS +=  \
 ../main.c \
 ../MPU6050.c \
 ../RecieveCommands.c \
+../Timer.c \
 ../twi_buf_pos.c \
 ../Uart.c \
 ../Uart_HW.c
@@ -59,6 +60,7 @@ i2c_twi.o \
 main.o \
 MPU6050.o \
 RecieveCommands.o \
+Timer.o \
 twi_buf_pos.o \
 Uart.o \
 Uart_HW.o
@@ -69,6 +71,7 @@ i2c_twi.o \
 main.o \
 MPU6050.o \
 RecieveCommands.o \
+Timer.o \
 twi_buf_pos.o \
 Uart.o \
 Uart_HW.o
@@ -79,6 +82,7 @@ i2c_twi.d \
 main.d \
 MPU6050.d \
 RecieveCommands.d \
+Timer.d \
 twi_buf_pos.d \
 Uart.d \
 Uart_HW.d
@@ -89,6 +93,7 @@ i2c_twi.d \
 main.d \
 MPU6050.d \
 RecieveCommands.d \
+Timer.d \
 twi_buf_pos.d \
 Uart.d \
 Uart_HW.d
@@ -136,6 +141,13 @@ LINKER_SCRIPT_DEP+=
 	
 
 ./RecieveCommands.o: .././RecieveCommands.c
+	@echo Building file: $<
+	@echo Invoking: AVR/GNU C Compiler : 5.4.0
+	$(QUOTE)D:\Atmel\Atmel Studio 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"D:\Atmel\Atmel Studio 7.1\7.0\Packs\atmel\ATmega_DFP\1.2.150\include"  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega328pb -B "D:\Atmel\Atmel Studio 7.1\7.0\Packs\atmel\ATmega_DFP\1.2.150\gcc\dev\atmega328pb" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
+./Timer.o: .././Timer.c
 	@echo Building file: $<
 	@echo Invoking: AVR/GNU C Compiler : 5.4.0
 	$(QUOTE)D:\Atmel\Atmel Studio 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"D:\Atmel\Atmel Studio 7.1\7.0\Packs\atmel\ATmega_DFP\1.2.150\include"  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega328pb -B "D:\Atmel\Atmel Studio 7.1\7.0\Packs\atmel\ATmega_DFP\1.2.150\gcc\dev\atmega328pb" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 

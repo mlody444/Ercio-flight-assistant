@@ -9,14 +9,22 @@
 #ifndef COMMON_H_
 #define COMMON_H_
 
+#define LED_ON	PORTB |= (1<<PB5)
+#define LED_OFF	PORTB &= ~(1<<PB5)
+#define LED_TGL	PORTB ^= (1<<PB5)
+
 #define SAMPLES_BUFF_SIZE 20
 #define X_AXIS 0
 #define Y_AXIS 1
 #define Z_AXIS 2
 
+#define COMMON_TIMERS 1
+
 
 int16_t gyro_offset[3];
 int16_t acc_offset[3];
+
+uint16_t test_counter;
 
 
 void PlaceInGyroBuffor(int16_t samples[]);

@@ -12,6 +12,8 @@ MPU6050.c
 
 RecieveCommands.c
 
+Timer.c
+
 twi_buf_pos.c
 
 Uart.c

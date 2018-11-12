@@ -166,6 +166,12 @@
     <Compile Include="RecieveCommands.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="Timer.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Timer.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="twi_buf_pos.c">
       <SubType>compile</SubType>
     </Compile>
