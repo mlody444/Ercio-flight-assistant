@@ -15,6 +15,7 @@
 #include "MPU6050_registers.h"
 #include "Uart.h"
 #include "Common.h"
+#include "i2c_twi.h"
 
 void CalibrateMPU6050(int16_t gyro_offset[], int16_t acc_offset[])
 {

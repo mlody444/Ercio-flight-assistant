@@ -4,6 +4,8 @@
 
 Common.c
 
+gyro_math.c
+
 i2c_twi.c
 
 main.c

@@ -38,6 +38,7 @@ SUBDIRS :=
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS +=  \
 ../Common.c \
+../gyro_math.c \
 ../i2c_twi.c \
 ../main.c \
 ../MPU6050.c \
@@ -56,6 +57,7 @@ ASM_SRCS +=
 
 OBJS +=  \
 Common.o \
+gyro_math.o \
 i2c_twi.o \
 main.o \
 MPU6050.o \
@@ -67,6 +69,7 @@ Uart_HW.o
 
 OBJS_AS_ARGS +=  \
 Common.o \
+gyro_math.o \
 i2c_twi.o \
 main.o \
 MPU6050.o \
@@ -78,6 +81,7 @@ Uart_HW.o
 
 C_DEPS +=  \
 Common.d \
+gyro_math.d \
 i2c_twi.d \
 main.d \
 MPU6050.d \
@@ -89,6 +93,7 @@ Uart_HW.d
 
 C_DEPS_AS_ARGS +=  \
 Common.d \
+gyro_math.d \
 i2c_twi.d \
 main.d \
 MPU6050.d \
@@ -113,6 +118,13 @@ LINKER_SCRIPT_DEP+=
 
 # AVR32/GNU C Compiler
 ./Common.o: .././Common.c
+	@echo Building file: $<
+	@echo Invoking: AVR/GNU C Compiler : 5.4.0
+	$(QUOTE)D:\Atmel\Atmel Studio 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"D:\Atmel\Atmel Studio 7.1\7.0\Packs\atmel\ATmega_DFP\1.2.150\include"  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega328pb -B "D:\Atmel\Atmel Studio 7.1\7.0\Packs\atmel\ATmega_DFP\1.2.150\gcc\dev\atmega328pb" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
+./gyro_math.o: .././gyro_math.c
 	@echo Building file: $<
 	@echo Invoking: AVR/GNU C Compiler : 5.4.0
 	$(QUOTE)D:\Atmel\Atmel Studio 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"D:\Atmel\Atmel Studio 7.1\7.0\Packs\atmel\ATmega_DFP\1.2.150\include"  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega328pb -B "D:\Atmel\Atmel Studio 7.1\7.0\Packs\atmel\ATmega_DFP\1.2.150\gcc\dev\atmega328pb" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
@@ -208,7 +220,7 @@ all: $(OUTPUT_FILE_PATH) $(ADDITIONAL_DEPENDENCIES)
 $(OUTPUT_FILE_PATH): $(OBJS) $(USER_OBJS) $(OUTPUT_FILE_DEP) $(LIB_DEP) $(LINKER_SCRIPT_DEP)
 	@echo Building target: $@
 	@echo Invoking: AVR/GNU Linker : 5.4.0
-	$(QUOTE)D:\Atmel\Atmel Studio 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE) -o$(OUTPUT_FILE_PATH_AS_ARGS) $(OBJS_AS_ARGS) $(USER_OBJS) $(LIBS) -Wl,-Map="Flight assistant.map" -Wl,--start-group -Wl,-lm  -Wl,--end-group -Wl,--gc-sections -mmcu=atmega328pb -B "D:\Atmel\Atmel Studio 7.1\7.0\Packs\atmel\ATmega_DFP\1.2.150\gcc\dev\atmega328pb"  
+	$(QUOTE)D:\Atmel\Atmel Studio 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE) -o$(OUTPUT_FILE_PATH_AS_ARGS) $(OBJS_AS_ARGS) $(USER_OBJS) $(LIBS) -Wl,-Map="Flight assistant.map" -Wl,-u,vfprintf -Wl,--start-group -Wl,-lm  -Wl,--end-group -Wl,--gc-sections -mmcu=atmega328pb -B "D:\Atmel\Atmel Studio 7.1\7.0\Packs\atmel\ATmega_DFP\1.2.150\gcc\dev\atmega328pb"  
 	@echo Finished building target: $@
 	"D:\Atmel\Atmel Studio 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-objcopy.exe" -O ihex -R .eeprom -R .fuse -R .lock -R .signature -R .user_signatures  "Flight assistant.elf" "Flight assistant.hex"
 	"D:\Atmel\Atmel Studio 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-objcopy.exe" -j .eeprom  --set-section-flags=.eeprom=alloc,load --change-section-lma .eeprom=0  --no-change-warnings -O ihex "Flight assistant.elf" "Flight assistant.eep" || exit 0

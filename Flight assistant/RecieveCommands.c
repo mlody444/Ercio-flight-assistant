@@ -122,7 +122,7 @@ int8_t er_buf(char * params)
 
  	 	SendStringInt("G X ", data[0]);
  	 	SendStringInt("G Y ", data[1]);
- 	 	SendStringInt("G Z ", data[2]);
+// 	 	SendStringInt("G Z ", data[2]);
 	}
 
  	if (SamplesAccBuf())

@@ -7,9 +7,13 @@
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
+#include <math.h>
+#include <stdlib.h>
 
 #include "Timer.h"
 #include "Common.h"
+#include "Uart.h"
+#include "gyro_math.h"
 
 void test(void);
 
@@ -37,8 +41,26 @@ void CheckCommonTimer(void)
 
 void test(void)
 {
-	test_counter = 20;
-	LED_TGL;
+	test_counter = 25;
+	int16_t gyro[3], acc[3];
+	if (SamplesGyroBuf())
+		ReadGyroBufAveraged(gyro);
+
+	if (SamplesAccBuf())
+		ReadAccBufAveraged(acc);
+	
+	double x_pos_acc = ProcessAngle(acc[Y_AXIS], acc[Z_AXIS]);
+	double y_pos_acc = (ProcessAngle(acc[X_AXIS], acc[Z_AXIS]) * (-1));
+
+	char text[8];
+
+	dtostrf(x_pos_acc, 0, 3, text);
+	SendString("P ");
+	SendString(text);
+	
+	dtostrf(y_pos_acc, 0, 3, text);
+	SendString(" ");
+	SendLine(text);
 }
 
 ISR (TIMER0_OVF_vect)	//each 1,024ms

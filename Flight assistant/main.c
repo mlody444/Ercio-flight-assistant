@@ -11,6 +11,7 @@
 #include <math.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
+#include <stdlib.h>
 
 #include "Uart.h"
 #include "i2c_twi.h"
@@ -24,9 +25,10 @@
 #define LED_OFF PORTB &= ~(1<<PB5)
 #define LED_TGL PORTB ^=  (1<<PB5)
 
-
 int main(void)
 {
+	pos_x = 0;
+	pox_y = 0;
 //	InitTWI();
 	DDRB = (1<<PB5);
 	TWSR0 = 0x00;
@@ -50,7 +52,6 @@ int main(void)
 	}
 
 	InitMPU6050();
-
 	InitCommonTimer();
 
     while (1) 

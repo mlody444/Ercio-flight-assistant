@@ -24,6 +24,9 @@
 int16_t gyro_offset[3];
 int16_t acc_offset[3];
 
+int32_t pos_x;
+int32_t pox_y;
+
 uint16_t test_counter;
 
 
@@ -38,6 +41,9 @@ uint8_t SamplesAccBuf();
 
 void ReadGyroBuf(int16_t reading_buf[3][SAMPLES_BUFF_SIZE], uint8_t sam_nr);
 void ReadAccBuf( int16_t reading_buf[3][SAMPLES_BUFF_SIZE], uint8_t sam_nr);
+
+void ReadGyroBufAveraged(int16_t gyro[3]);
+void ReadAccBufAveraged(int16_t gyro[3]);
 
 void AveragingLinearMPU6050(int16_t data[3][SAMPLES_BUFF_SIZE], uint8_t samples, int16_t results[3]);
 void AveragingWeightingMPU6050(int16_t data[3][SAMPLES_BUFF_SIZE], uint8_t samples, int16_t results[3]);

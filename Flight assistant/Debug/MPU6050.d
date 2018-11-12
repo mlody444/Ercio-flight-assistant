@@ -14,7 +14,8 @@ MPU6050.d MPU6050.o: .././MPU6050.c \
  d:\atmel\atmel\ studio\ 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\version.h \
  d:\atmel\atmel\ studio\ 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\fuse.h \
  d:\atmel\atmel\ studio\ 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\lock.h \
- .././MPU6050.h .././MPU6050_registers.h .././Uart.h .././Common.h
+ .././MPU6050.h .././MPU6050_registers.h .././Uart.h .././Common.h \
+ .././i2c_twi.h
 
 d:\atmel\atmel\ studio\ 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\util\delay.h:
 
@@ -53,3 +54,5 @@ d:\atmel\atmel\ studio\ 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\av
 .././Uart.h:
 
 .././Common.h:
+
+.././i2c_twi.h:
