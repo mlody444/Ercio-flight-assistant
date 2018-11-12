@@ -9,7 +9,7 @@
 #ifndef COMMON_H_
 #define COMMON_H_
 
-#define SAMPLES_BUFF_SIZE 5
+#define SAMPLES_BUFF_SIZE 20
 #define X_AXIS 0
 #define Y_AXIS 1
 #define Z_AXIS 2
