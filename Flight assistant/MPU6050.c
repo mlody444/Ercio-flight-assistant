@@ -136,8 +136,8 @@ void InitMPU6050(void)
 
 	// Configure MPU6050 gyro and accelerometer for bias calculation
 	I2C_write_byte(MPU6050_ADDRESS, CONFIG, 0x03);      // Set low-pass filter to 44 Hz
-	I2C_write_byte(MPU6050_ADDRESS, SMPLRT_DIV, 4);  // Set sample rate to 1000 Hz
-	I2C_write_byte(MPU6050_ADDRESS, GYRO_CONFIG, 0x00);  // Set gyro full-scale to 250 degrees per second, maximum sensitivity
+	I2C_write_byte(MPU6050_ADDRESS, SMPLRT_DIV, 4);  // Set sample rate to 250 Hz
+	I2C_write_byte(MPU6050_ADDRESS, GYRO_CONFIG, 0x08);  // Set gyro full-scale to 500 degrees per second
 	I2C_write_byte(MPU6050_ADDRESS, ACCEL_CONFIG, 0x00); // Set accelerometer full-scale to 2 g, maximum sensitivity
 
 	I2C_write_byte(MPU6050_ADDRESS, USER_CTRL, 0x40);   // Enable FIFO

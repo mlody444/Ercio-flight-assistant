@@ -89,6 +89,20 @@ void ReadAccSample(int16_t reading_buf[])
 		acc_tail = 0;
 }
 
+void ReadGyroSample_ViewOnly(int16_t reading_buf[])
+{
+	reading_buf[0] = X_gyro_buff[(gyro_head - 1)];
+	reading_buf[1] = Y_gyro_buff[(gyro_head - 1)];
+	reading_buf[2] = Z_gyro_buff[(gyro_head - 1)];
+}
+
+void ReadAccSample_ViewOnly(int16_t reading_buf[])
+{
+	reading_buf[0] = X_acc_buff[(acc_head - 1)];
+	reading_buf[1] = Y_acc_buff[(acc_head - 1)];
+	reading_buf[2] = Z_acc_buff[(acc_head - 1)];
+}
+
 uint8_t SamplesGyroBuf()
 {
 	uint8_t gyro_samples;

@@ -25,19 +25,23 @@ int16_t gyro_offset[3];
 int16_t acc_offset[3];
 
 int32_t pos_x;
-int32_t pox_y;
+int32_t pos_y;
 
 uint16_t test_counter;
 
 
-void PlaceInGyroBuffor(int16_t samples[]);
-void PlaceInAccBuffor(int16_t samples[]);
+void PlaceInGyroBuffor(int16_t samples[3]);
+void PlaceInAccBuffor(int16_t samples[3]);
 
-void ReadGyroSample(int16_t reading_buf[]);
-void ReadAccSample(int16_t reading_buf[]);
+void ReadGyroSample(int16_t reading_buf[3]);
+void ReadAccSample(int16_t reading_buf[3]);
 
 uint8_t SamplesGyroBuf();
 uint8_t SamplesAccBuf();
+
+void ReadGyroSample_ViewOnly(int16_t reading_buf[3]);
+void ReadAcccSample_ViewOnly(int16_t reading_buf[3]);
+
 
 void ReadGyroBuf(int16_t reading_buf[3][SAMPLES_BUFF_SIZE], uint8_t sam_nr);
 void ReadAccBuf( int16_t reading_buf[3][SAMPLES_BUFF_SIZE], uint8_t sam_nr);

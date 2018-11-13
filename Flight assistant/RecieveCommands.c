@@ -99,8 +99,8 @@ int8_t er_read(char * params)
 	int16_t gyro[3];
 	int16_t acc[3];
 	
-	ReadGyroSample(gyro);
-	ReadAccSample(acc);
+	ReadGyroSample_ViewOnly(gyro);
+	ReadAccSample_ViewOnly(acc);
 
 	SendStringInt("G X ", gyro[0]);
 	SendStringInt("G Y ", gyro[1]);

@@ -28,7 +28,7 @@
 int main(void)
 {
 	pos_x = 0;
-	pox_y = 0;
+	pos_y = 0;
 //	InitTWI();
 	DDRB = (1<<PB5);
 	TWSR0 = 0x00;
