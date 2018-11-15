@@ -20,10 +20,24 @@
 
 #define COMMON_TIMERS 1
 
+#define MPU6050_FS 250
+#define POS_FS 50
+#define MPU6050_LSB 65
+
+#define POS_MIX_NORMAL 95
+#define POS_MIX_SPECIAL 99
+
+// 1g = 16384
+// 1g^2 * 1.2 = 322122547
+#define G_SPECIAL_MAX 322122547
+// 1g^2 * 0.8 = 214748364
+#define G_SPECIAL_MIN 214748364
+
 
 int16_t gyro_offset[3];
 int16_t acc_offset[3];
 
+//pos values are stored as degrees + 100 - avoid double with enough accuracy
 int32_t pos_x;
 int32_t pos_y;
 

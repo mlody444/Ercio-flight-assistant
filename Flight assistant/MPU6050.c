@@ -7,6 +7,8 @@
 
 #define F_CPU 16000000L
 
+#define MPU6050_TIMING (1000 / MPU6050_FS)
+
 #include <util/delay.h>
 #include <avr/interrupt.h>
 #include <avr/io.h>
@@ -135,9 +137,10 @@ void InitMPU6050(void)
 	_delay_ms(15);
 
 	// Configure MPU6050 gyro and accelerometer for bias calculation
-	I2C_write_byte(MPU6050_ADDRESS, CONFIG, 0x03);      // Set low-pass filter to 44 Hz
-	I2C_write_byte(MPU6050_ADDRESS, SMPLRT_DIV, 4);  // Set sample rate to 250 Hz
-	I2C_write_byte(MPU6050_ADDRESS, GYRO_CONFIG, 0x08);  // Set gyro full-scale to 500 degrees per second
+	uint8_t fs = 1000 / MPU6050_FS;
+	I2C_write_byte(MPU6050_ADDRESS, CONFIG, 0x03);       // Set low-pass filter to 44 Hz
+	I2C_write_byte(MPU6050_ADDRESS, SMPLRT_DIV, MPU6050_TIMING);	 // Set sample rate to be set in common.h
+	I2C_write_byte(MPU6050_ADDRESS, GYRO_CONFIG, 0x08);  // Set gyro full-scale to 500 degrees per second - MPU6050_LSB
 	I2C_write_byte(MPU6050_ADDRESS, ACCEL_CONFIG, 0x00); // Set accelerometer full-scale to 2 g, maximum sensitivity
 
 	I2C_write_byte(MPU6050_ADDRESS, USER_CTRL, 0x40);   // Enable FIFO

@@ -15,6 +15,9 @@
 #include "Uart.h"
 #include "gyro_math.h"
 
+#define POS_FS 50
+#define POS_TIMING (1000 / POS_FS)
+
 void test(void);
 
 TIMER_DECREMENT decrement_common[COMMON_TIMERS] = {
@@ -41,40 +44,44 @@ void CheckCommonTimer(void)
 
 void test(void)
 {
-	test_counter = 20;
-	int32_t pomocnicza;
+	test_counter = POS_TIMING;
 	int16_t gyro[3], acc[3];
 	if (SamplesGyroBuf())
 		ReadGyroBufAveraged(gyro);
 
 	if (SamplesAccBuf())
 		ReadAccBufAveraged(acc);
-	
-	double x_pos_acc = ProcessAngle(acc[Y_AXIS], acc[Z_AXIS]);
-	double y_pos_acc = (ProcessAngle(acc[X_AXIS], acc[Z_AXIS]) * (-1));
-	int32_t pos_acc;
 
-	x_pos_acc *= 1;
-	y_pos_acc *= 1;
+	ProcessPosition(gyro, acc);
 
-	int32_t x_pos_gyro = (int32_t)gyro[X_AXIS] * 100;
-	int32_t y_pos_gyro = (int32_t)gyro[Y_AXIS] * 100;
+// 	int32_t pomocnicza;
+// 	double x_pos_acc = ProcessAngle(acc[Y_AXIS], acc[Z_AXIS]);
+// 	double y_pos_acc = (ProcessAngle(acc[X_AXIS], acc[Z_AXIS]) * (-1));
+// 	int32_t pos_acc;
+//
+// 	x_pos_acc *= 1;
+// 	y_pos_acc *= 1;
+// 
+// 	int32_t x_pos_gyro = (int32_t)gyro[X_AXIS] * 100;
+// 	int32_t y_pos_gyro = (int32_t)gyro[Y_AXIS] * 100;
+// 
+// 	x_pos_gyro = x_pos_gyro / (50 * MPU6050_LSB);
+// 	y_pos_gyro = y_pos_gyro / (50 * MPU6050_LSB);
+// 
+// 	pos_acc = (int32_t)x_pos_acc;
+// 	pomocnicza = pos_x + x_pos_gyro;
+// 	pomocnicza *= 99;
+// 	pomocnicza /= 100;
+// 	pos_x = pos_acc + pomocnicza;
+// 	
+// 	pos_acc = (int32_t)y_pos_acc;
+// 	pomocnicza = pos_y + y_pos_gyro;
+// 	pomocnicza *= 99;
+// 	pomocnicza /= 100;
+// 	pos_y = pos_acc + pomocnicza;
 
- 	x_pos_gyro = x_pos_gyro / (50 * 65);
- 	y_pos_gyro = y_pos_gyro / (50 * 65);
 
-	pos_acc = (int32_t)x_pos_acc;
-	pomocnicza = pos_x + x_pos_gyro;
-	pomocnicza *= 99;
-	pomocnicza /= 100;
-	pos_x = pos_acc + pomocnicza;
 	SendStringInt("B X ", pos_x);
-
-	pos_acc = (int32_t)y_pos_acc;
-	pomocnicza = pos_y + y_pos_gyro;
-	pomocnicza *= 99;
-	pomocnicza /= 100;
-	pos_y = pos_acc + pomocnicza;
 	SendStringInt("B Y ", pos_y);
 }
 
