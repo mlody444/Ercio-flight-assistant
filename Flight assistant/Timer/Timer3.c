@@ -42,11 +42,11 @@ void InitTimer3(void)
 ISR (TIMER3_COMPA_vect)		//Interrupt on top value
 {
  	//set flag to process
-//	events.flag.process_PWMs = 1;
-// 	//processing new values will be done in main loop as event (to keep interrupt short)
-// 
-// 	OCR3B = FIRST_INTERRUPT;	//first interrupt after processing values
-// 	selected_PWM_channel = 0;
+	events.flag.process_PWMs = 1;
+	//processing new values will be done in main loop as event (to keep interrupt short)
+
+	OCR3B = FIRST_INTERRUPT;	//first interrupt after processing values
+	selected_PWM_channel = 0;
 }
 
 ISR (TIMER3_COMPB_vect)		//PWM init interrupt

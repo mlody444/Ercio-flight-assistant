@@ -56,6 +56,7 @@ int main(void)
 
 	InitMPU6050();
 	InitCommonTimer();
+	InitTrimming();
 
     while (1) 
     {

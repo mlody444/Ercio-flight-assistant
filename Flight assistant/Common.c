@@ -19,6 +19,7 @@ void ProcessPWMs(void);
 void Read_Channels(CHANNELS *channels);
 void Process_trimming(void);
 
+EVENT_REGISTER events;
 
 //buffors for samples
 int16_t X_gyro_buff[SAMPLES];
