@@ -16,8 +16,9 @@ main.d main.o: .././main.c \
  d:\atmel\atmel\ studio\ 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\util\delay_basic.h \
  d:\atmel\atmel\ studio\ 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\stdlib.h \
  d:\atmel\atmel\ studio\ 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\lib\gcc\avr\5.4.0\include\stddef.h \
- .././Uart.h .././i2c_twi.h .././twi_buf_pos.h .././MPU6050.h \
- .././MPU6050_registers.h .././Common.h .././Timer.h
+ ../Uart/Uart.h .././i2c_twi.h .././twi_buf_pos.h ../MPU6050/MPU6050.h \
+ ../MPU6050/MPU6050_registers.h .././Common.h ../Timer/Timer.h \
+ ../SBUS/Sbus.h
 
 d:\atmel\atmel\ studio\ 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\io.h:
 
@@ -53,16 +54,18 @@ d:\atmel\atmel\ studio\ 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\st
 
 d:\atmel\atmel\ studio\ 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\lib\gcc\avr\5.4.0\include\stddef.h:
 
-.././Uart.h:
+../Uart/Uart.h:
 
 .././i2c_twi.h:
 
 .././twi_buf_pos.h:
 
-.././MPU6050.h:
+../MPU6050/MPU6050.h:
 
-.././MPU6050_registers.h:
+../MPU6050/MPU6050_registers.h:
 
 .././Common.h:
 
-.././Timer.h:
+../Timer/Timer.h:
+
+../SBUS/Sbus.h:

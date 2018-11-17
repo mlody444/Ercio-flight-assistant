@@ -9,8 +9,15 @@
 #include <math.h>
 
 #include "Common.h"
+#include "PWM_control.h"
+#include "Sbus.h"
+#include "Timer3.h"
 
 #define SAMPLES SAMPLES_BUFF_SIZE + 1
+
+void ProcessPWMs(void);
+void Read_Channels(CHANNELS *channels);
+void Process_trimming(void);
 
 
 //buffors for samples
@@ -221,4 +228,114 @@ void AveragingWeightingMPU6050(int16_t data[3][SAMPLES_BUFF_SIZE], uint8_t sampl
 	results[X_AXIS] = (int16_t) sum[X_AXIS];
 	results[Y_AXIS] = (int16_t) sum[Y_AXIS];
 	results[Z_AXIS] = (int16_t) sum[Z_AXIS];
+}
+
+void Events(void)
+{
+	if (events.flag.process_PWMs == 1)
+	{
+		ProcessPWMs();
+		events.flag.process_PWMs = 0;
+	}
+}
+
+void ProcessPWMs(void)
+{
+	channel_old = channel_new;
+	Read_Channels(&channel_new);
+	Process_trimming();
+
+	//Set PWMs
+	uint16_t sensitivity = (uint16_t)(((uint32_t)410 + (uint32_t)channel_new.sensitivity) * 10) / 203;	//div by 2025
+
+	int16_t roll = ((int32_t)channel_new.roll * ELEVON_RANGE/2) / 820;
+	int16_t pitch = ((int32_t)channel_new.pitch * ELEVON_RANGE/2) / 820;
+
+	uint32_t left_pwm	= MID_PWM - roll - ram_trim.roll - pitch - ram_trim.pitch;
+	uint32_t right_pwm	= MID_PWM - roll - ram_trim.roll + pitch + ram_trim.pitch;
+	uint32_t throtle	= THROTLE_MIN + channel_new.throtle * 7;
+
+	pwm_channels[0].counter = throtle;
+
+	pwm_channels[1].counter = left_pwm;
+	pwm_channels[2].counter = right_pwm;
+}
+
+void Read_Channels(CHANNELS *channels)
+{
+	channels->throtle	= channel_value[1] - 172;
+	channels->roll		= channel_value[2] - 992;
+	channels->pitch		= channel_value[3] - 992;
+	channels->yaw		= channel_value[4] - 992;
+	channels->bit_values= channel_value[0];
+	
+	
+	if (channel_value[6] < 582)
+	channels->trim_select = Roll;
+
+	else if (channel_value[6] > 1574)
+	channels->trim_select = Pitch;
+
+	else
+	channels->trim_select = None;
+	
+	channels->trim_value = ((int16_t)channel_value[7] - 992) / TRIM_MAX_FACTOR;
+
+	if (channel_value[9] > 992)
+	channels->buzzer = 1;
+	
+	else
+	channels->buzzer = 0;
+
+	uint16_t sens_help = (channel_value[8] - 172);
+
+	channels->sensitivity = (uint16_t) sens_help;
+	
+
+
+	if (channel_value[10] < 582)
+	channels->trim_reset = Reset_Roll;
+
+	else if (channel_value[10] > 1574)
+	channels->trim_reset = Reset_Pitch;
+
+	else
+	channels->trim_reset = Reset_None;
+}
+
+void Process_trimming(void)
+{
+	switch (channel_new.trim_select)
+	{
+		case Roll:
+		ram_trim.roll = ram_trim.roll + channel_new.trim_value;
+
+		if (ram_trim.roll > TRIM_MAX)
+		{
+			ram_trim.roll = TRIM_MAX;
+		}
+		else if (ram_trim.roll < - TRIM_MAX)
+		{
+			ram_trim.roll = - TRIM_MAX;
+		}
+		break;
+
+		case Pitch:
+		ram_trim.pitch = ram_trim.pitch + channel_new.trim_value;
+		if (ram_trim.pitch > TRIM_MAX)
+		{
+			ram_trim.pitch = TRIM_MAX;
+		}
+		else if (ram_trim.pitch < - TRIM_MAX)
+		{
+			ram_trim.pitch = - TRIM_MAX;
+		}
+		break;
+		case None:
+		if (channel_old.trim_select != None)	//process saving to EEPROM
+		{
+			eeprom_write_block(&ram_trim, &eem_trim, sizeof(ram_trim));
+		}
+		break;
+	}
 }

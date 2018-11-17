@@ -1,4 +1,4 @@
-Common.d Common.o: .././Common.c \
+Uart/RecieveCommands.d Uart/RecieveCommands.o: ../Uart/RecieveCommands.c \
  d:\atmel\atmel\ studio\ 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\io.h \
  d:\atmel\atmel\ studio\ 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\sfr_defs.h \
  d:\atmel\atmel\ studio\ 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\inttypes.h \
@@ -10,8 +10,14 @@ Common.d Common.o: .././Common.c \
  d:\atmel\atmel\ studio\ 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\version.h \
  d:\atmel\atmel\ studio\ 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\fuse.h \
  d:\atmel\atmel\ studio\ 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\lock.h \
+ d:\atmel\atmel\ studio\ 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\pgmspace.h \
+ d:\atmel\atmel\ studio\ 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\lib\gcc\avr\5.4.0\include\stddef.h \
+ d:\atmel\atmel\ studio\ 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\string.h \
+ d:\atmel\atmel\ studio\ 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\stdlib.h \
+ d:\atmel\atmel\ studio\ 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\util\delay.h \
+ d:\atmel\atmel\ studio\ 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\util\delay_basic.h \
  d:\atmel\atmel\ studio\ 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\math.h \
- .././Common.h ../Timer/PWM_control.h ../SBUS/Sbus.h ../Timer/Timer3.h
+ ../Uart/Uart.h ../Uart/Uart_HW.h ../Uart/RecieveCommands.h ../Common.h
 
 d:\atmel\atmel\ studio\ 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\io.h:
 
@@ -35,12 +41,24 @@ d:\atmel\atmel\ studio\ 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\av
 
 d:\atmel\atmel\ studio\ 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\lock.h:
 
+d:\atmel\atmel\ studio\ 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\pgmspace.h:
+
+d:\atmel\atmel\ studio\ 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\lib\gcc\avr\5.4.0\include\stddef.h:
+
+d:\atmel\atmel\ studio\ 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\string.h:
+
+d:\atmel\atmel\ studio\ 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\stdlib.h:
+
+d:\atmel\atmel\ studio\ 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\util\delay.h:
+
+d:\atmel\atmel\ studio\ 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\util\delay_basic.h:
+
 d:\atmel\atmel\ studio\ 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\math.h:
 
-.././Common.h:
+../Uart/Uart.h:
 
-../Timer/PWM_control.h:
+../Uart/Uart_HW.h:
 
-../SBUS/Sbus.h:
+../Uart/RecieveCommands.h:
 
-../Timer/Timer3.h:
+../Common.h:

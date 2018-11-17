@@ -4,21 +4,29 @@
 
 Common.c
 
-gyro_math.c
-
 i2c_twi.c
 
 main.c
 
-MPU6050.c
+MPU6050\gyro_math.c
 
-RecieveCommands.c
+MPU6050\MPU6050.c
 
-Timer.c
+SBUS\Sbus.c
+
+Timer\PWM_control.c
+
+Timer\Timer.c
+
+Timer\Timer3.c
+
+Timer\Timer4.c
 
 twi_buf_pos.c
 
-Uart.c
+Uart\RecieveCommands.c
 
-Uart_HW.c
+Uart\Uart.c
+
+Uart\Uart_HW.c
 

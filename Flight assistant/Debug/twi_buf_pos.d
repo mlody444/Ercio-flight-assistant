@@ -14,7 +14,7 @@ twi_buf_pos.d twi_buf_pos.o: .././twi_buf_pos.c \
  d:\atmel\atmel\ studio\ 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\util\delay.h \
  d:\atmel\atmel\ studio\ 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\util\delay_basic.h \
  d:\atmel\atmel\ studio\ 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\math.h \
- .././twi_buf_pos.h .././Uart.h
+ .././twi_buf_pos.h ../Uart/Uart.h
 
 d:\atmel\atmel\ studio\ 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\io.h:
 
@@ -48,4 +48,4 @@ d:\atmel\atmel\ studio\ 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\ma
 
 .././twi_buf_pos.h:
 
-.././Uart.h:
+../Uart/Uart.h:

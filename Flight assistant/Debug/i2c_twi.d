@@ -10,7 +10,7 @@ i2c_twi.d i2c_twi.o: .././i2c_twi.c \
  d:\atmel\atmel\ studio\ 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\version.h \
  d:\atmel\atmel\ studio\ 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\fuse.h \
  d:\atmel\atmel\ studio\ 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\lock.h \
- .././i2c_twi.h .././Uart.h
+ .././i2c_twi.h ../Uart/Uart.h
 
 d:\atmel\atmel\ studio\ 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\io.h:
 
@@ -36,4 +36,4 @@ d:\atmel\atmel\ studio\ 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\av
 
 .././i2c_twi.h:
 
-.././Uart.h:
+../Uart/Uart.h:

@@ -14,6 +14,10 @@
 #include "Common.h"
 #include "Uart.h"
 #include "gyro_math.h"
+#include "Sbus.h"
+#include "PWM_control.h"
+#include "Timer3.h"
+#include "Timer4.h"
 
 #define POS_FS 50
 #define POS_TIMING (1000 / POS_FS)
@@ -22,12 +26,20 @@ void test(void);
 
 TIMER_DECREMENT decrement_common[COMMON_TIMERS] = {
 	{&test_counter, test},
+	{&sbus_buffor_process_counter, Sbus_process_buffor},
 };
 
 void InitCommonTimer(void)
 {
 	TIMSK0 |= (1<<TOIE0);			//Overflow interupt enable
 	TCCR0B |= (1<<CS01)| (1<<CS00);	//Prescaler 64
+}
+
+
+void InitPWMTimers(void)
+{
+	InitTimer3();
+	InitTimer4();
 }
 
 void CheckCommonTimer(void)
@@ -54,33 +66,6 @@ void test(void)
 
 	ProcessPosition(gyro, acc);
 
-// 	int32_t pomocnicza;
-// 	double x_pos_acc = ProcessAngle(acc[Y_AXIS], acc[Z_AXIS]);
-// 	double y_pos_acc = (ProcessAngle(acc[X_AXIS], acc[Z_AXIS]) * (-1));
-// 	int32_t pos_acc;
-//
-// 	x_pos_acc *= 1;
-// 	y_pos_acc *= 1;
-// 
-// 	int32_t x_pos_gyro = (int32_t)gyro[X_AXIS] * 100;
-// 	int32_t y_pos_gyro = (int32_t)gyro[Y_AXIS] * 100;
-// 
-// 	x_pos_gyro = x_pos_gyro / (50 * MPU6050_LSB);
-// 	y_pos_gyro = y_pos_gyro / (50 * MPU6050_LSB);
-// 
-// 	pos_acc = (int32_t)x_pos_acc;
-// 	pomocnicza = pos_x + x_pos_gyro;
-// 	pomocnicza *= 99;
-// 	pomocnicza /= 100;
-// 	pos_x = pos_acc + pomocnicza;
-// 	
-// 	pos_acc = (int32_t)y_pos_acc;
-// 	pomocnicza = pos_y + y_pos_gyro;
-// 	pomocnicza *= 99;
-// 	pomocnicza /= 100;
-// 	pos_y = pos_acc + pomocnicza;
-
-
 	SendStringInt("B X ", pos_x);
 	SendStringInt("B Y ", pos_y);
 }
@@ -95,4 +80,8 @@ ISR (TIMER0_OVF_vect)	//each 1,024ms
 			*decrement_common[i].counter = *decrement_common[i].counter - 1;
 		}
 	}
+
+	if (sbus_buffor_start_counter != 0xFF) sbus_buffor_start_counter++;
+	if (sbus_frame_delay != 0xFF) sbus_frame_delay++;
+	if (sbus_last_frame_counter!= 0xFF) sbus_last_frame_counter++;
 }

@@ -20,6 +20,7 @@
 #include "MPU6050_registers.h"
 #include "Common.h"
 #include "Timer.h"
+#include "Sbus.h"
 
 #define LED_ON  PORTB |=  (1<<PB5)
 #define LED_OFF PORTB &= ~(1<<PB5)
@@ -39,6 +40,8 @@ int main(void)
 // 	test = test & 0b01111110;
 
 	InitUartCOM();
+	InitUartSBUS();
+	InitPWMTimers();
 	sei();
 	SendLine("Uart dziala");
 

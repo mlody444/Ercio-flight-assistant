@@ -32,21 +32,29 @@ LIB_DEP:=
 LINKER_SCRIPT_DEP:=
 
 # Every subdirectory with source files must be described here
-SUBDIRS := 
+SUBDIRS :=  \
+../MPU6050 \
+../Uart \
+../SBUS \
+../Timer
 
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS +=  \
 ../Common.c \
-../gyro_math.c \
 ../i2c_twi.c \
 ../main.c \
-../MPU6050.c \
-../RecieveCommands.c \
-../Timer.c \
+../MPU6050/gyro_math.c \
+../MPU6050/MPU6050.c \
+../SBUS/Sbus.c \
+../Timer/PWM_control.c \
+../Timer/Timer.c \
+../Timer/Timer3.c \
+../Timer/Timer4.c \
 ../twi_buf_pos.c \
-../Uart.c \
-../Uart_HW.c
+../Uart/RecieveCommands.c \
+../Uart/Uart.c \
+../Uart/Uart_HW.c
 
 
 PREPROCESSING_SRCS += 
@@ -57,51 +65,67 @@ ASM_SRCS +=
 
 OBJS +=  \
 Common.o \
-gyro_math.o \
 i2c_twi.o \
 main.o \
-MPU6050.o \
-RecieveCommands.o \
-Timer.o \
+MPU6050/gyro_math.o \
+MPU6050/MPU6050.o \
+SBUS/Sbus.o \
+Timer/PWM_control.o \
+Timer/Timer.o \
+Timer/Timer3.o \
+Timer/Timer4.o \
 twi_buf_pos.o \
-Uart.o \
-Uart_HW.o
+Uart/RecieveCommands.o \
+Uart/Uart.o \
+Uart/Uart_HW.o
 
 OBJS_AS_ARGS +=  \
 Common.o \
-gyro_math.o \
 i2c_twi.o \
 main.o \
-MPU6050.o \
-RecieveCommands.o \
-Timer.o \
+MPU6050/gyro_math.o \
+MPU6050/MPU6050.o \
+SBUS/Sbus.o \
+Timer/PWM_control.o \
+Timer/Timer.o \
+Timer/Timer3.o \
+Timer/Timer4.o \
 twi_buf_pos.o \
-Uart.o \
-Uart_HW.o
+Uart/RecieveCommands.o \
+Uart/Uart.o \
+Uart/Uart_HW.o
 
 C_DEPS +=  \
 Common.d \
-gyro_math.d \
 i2c_twi.d \
 main.d \
-MPU6050.d \
-RecieveCommands.d \
-Timer.d \
+MPU6050/gyro_math.d \
+MPU6050/MPU6050.d \
+SBUS/Sbus.d \
+Timer/PWM_control.d \
+Timer/Timer.d \
+Timer/Timer3.d \
+Timer/Timer4.d \
 twi_buf_pos.d \
-Uart.d \
-Uart_HW.d
+Uart/RecieveCommands.d \
+Uart/Uart.d \
+Uart/Uart_HW.d
 
 C_DEPS_AS_ARGS +=  \
 Common.d \
-gyro_math.d \
 i2c_twi.d \
 main.d \
-MPU6050.d \
-RecieveCommands.d \
-Timer.d \
+MPU6050/gyro_math.d \
+MPU6050/MPU6050.d \
+SBUS/Sbus.d \
+Timer/PWM_control.d \
+Timer/Timer.d \
+Timer/Timer3.d \
+Timer/Timer4.d \
 twi_buf_pos.d \
-Uart.d \
-Uart_HW.d
+Uart/RecieveCommands.d \
+Uart/Uart.d \
+Uart/Uart_HW.d
 
 OUTPUT_FILE_PATH +=Flight\ assistant.elf
 
@@ -120,70 +144,98 @@ LINKER_SCRIPT_DEP+=
 ./Common.o: .././Common.c
 	@echo Building file: $<
 	@echo Invoking: AVR/GNU C Compiler : 5.4.0
-	$(QUOTE)D:\Atmel\Atmel Studio 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"D:\Atmel\Atmel Studio 7.1\7.0\Packs\atmel\ATmega_DFP\1.2.150\include"  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega328pb -B "D:\Atmel\Atmel Studio 7.1\7.0\Packs\atmel\ATmega_DFP\1.2.150\gcc\dev\atmega328pb" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
-	@echo Finished building: $<
-	
-
-./gyro_math.o: .././gyro_math.c
-	@echo Building file: $<
-	@echo Invoking: AVR/GNU C Compiler : 5.4.0
-	$(QUOTE)D:\Atmel\Atmel Studio 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"D:\Atmel\Atmel Studio 7.1\7.0\Packs\atmel\ATmega_DFP\1.2.150\include"  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega328pb -B "D:\Atmel\Atmel Studio 7.1\7.0\Packs\atmel\ATmega_DFP\1.2.150\gcc\dev\atmega328pb" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	$(QUOTE)D:\Atmel\Atmel Studio 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"D:\Atmel\Atmel Studio 7.1\7.0\Packs\atmel\ATmega_DFP\1.2.150\include" -I"../MPU6050" -I"../SBUS" -I"../Timer" -I"../Uart" -I".."  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega328pb -B "D:\Atmel\Atmel Studio 7.1\7.0\Packs\atmel\ATmega_DFP\1.2.150\gcc\dev\atmega328pb" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
 	@echo Finished building: $<
 	
 
 ./i2c_twi.o: .././i2c_twi.c
 	@echo Building file: $<
 	@echo Invoking: AVR/GNU C Compiler : 5.4.0
-	$(QUOTE)D:\Atmel\Atmel Studio 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"D:\Atmel\Atmel Studio 7.1\7.0\Packs\atmel\ATmega_DFP\1.2.150\include"  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega328pb -B "D:\Atmel\Atmel Studio 7.1\7.0\Packs\atmel\ATmega_DFP\1.2.150\gcc\dev\atmega328pb" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	$(QUOTE)D:\Atmel\Atmel Studio 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"D:\Atmel\Atmel Studio 7.1\7.0\Packs\atmel\ATmega_DFP\1.2.150\include" -I"../MPU6050" -I"../SBUS" -I"../Timer" -I"../Uart" -I".."  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega328pb -B "D:\Atmel\Atmel Studio 7.1\7.0\Packs\atmel\ATmega_DFP\1.2.150\gcc\dev\atmega328pb" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
 	@echo Finished building: $<
 	
 
 ./main.o: .././main.c
 	@echo Building file: $<
 	@echo Invoking: AVR/GNU C Compiler : 5.4.0
-	$(QUOTE)D:\Atmel\Atmel Studio 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"D:\Atmel\Atmel Studio 7.1\7.0\Packs\atmel\ATmega_DFP\1.2.150\include"  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega328pb -B "D:\Atmel\Atmel Studio 7.1\7.0\Packs\atmel\ATmega_DFP\1.2.150\gcc\dev\atmega328pb" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	$(QUOTE)D:\Atmel\Atmel Studio 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"D:\Atmel\Atmel Studio 7.1\7.0\Packs\atmel\ATmega_DFP\1.2.150\include" -I"../MPU6050" -I"../SBUS" -I"../Timer" -I"../Uart" -I".."  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega328pb -B "D:\Atmel\Atmel Studio 7.1\7.0\Packs\atmel\ATmega_DFP\1.2.150\gcc\dev\atmega328pb" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
 	@echo Finished building: $<
 	
 
-./MPU6050.o: .././MPU6050.c
+MPU6050/gyro_math.o: ../MPU6050/gyro_math.c
 	@echo Building file: $<
 	@echo Invoking: AVR/GNU C Compiler : 5.4.0
-	$(QUOTE)D:\Atmel\Atmel Studio 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"D:\Atmel\Atmel Studio 7.1\7.0\Packs\atmel\ATmega_DFP\1.2.150\include"  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega328pb -B "D:\Atmel\Atmel Studio 7.1\7.0\Packs\atmel\ATmega_DFP\1.2.150\gcc\dev\atmega328pb" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	$(QUOTE)D:\Atmel\Atmel Studio 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"D:\Atmel\Atmel Studio 7.1\7.0\Packs\atmel\ATmega_DFP\1.2.150\include" -I"../MPU6050" -I"../SBUS" -I"../Timer" -I"../Uart" -I".."  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega328pb -B "D:\Atmel\Atmel Studio 7.1\7.0\Packs\atmel\ATmega_DFP\1.2.150\gcc\dev\atmega328pb" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
 	@echo Finished building: $<
 	
 
-./RecieveCommands.o: .././RecieveCommands.c
+MPU6050/MPU6050.o: ../MPU6050/MPU6050.c
 	@echo Building file: $<
 	@echo Invoking: AVR/GNU C Compiler : 5.4.0
-	$(QUOTE)D:\Atmel\Atmel Studio 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"D:\Atmel\Atmel Studio 7.1\7.0\Packs\atmel\ATmega_DFP\1.2.150\include"  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega328pb -B "D:\Atmel\Atmel Studio 7.1\7.0\Packs\atmel\ATmega_DFP\1.2.150\gcc\dev\atmega328pb" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	$(QUOTE)D:\Atmel\Atmel Studio 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"D:\Atmel\Atmel Studio 7.1\7.0\Packs\atmel\ATmega_DFP\1.2.150\include" -I"../MPU6050" -I"../SBUS" -I"../Timer" -I"../Uart" -I".."  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega328pb -B "D:\Atmel\Atmel Studio 7.1\7.0\Packs\atmel\ATmega_DFP\1.2.150\gcc\dev\atmega328pb" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
 	@echo Finished building: $<
 	
 
-./Timer.o: .././Timer.c
+SBUS/Sbus.o: ../SBUS/Sbus.c
 	@echo Building file: $<
 	@echo Invoking: AVR/GNU C Compiler : 5.4.0
-	$(QUOTE)D:\Atmel\Atmel Studio 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"D:\Atmel\Atmel Studio 7.1\7.0\Packs\atmel\ATmega_DFP\1.2.150\include"  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega328pb -B "D:\Atmel\Atmel Studio 7.1\7.0\Packs\atmel\ATmega_DFP\1.2.150\gcc\dev\atmega328pb" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	$(QUOTE)D:\Atmel\Atmel Studio 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"D:\Atmel\Atmel Studio 7.1\7.0\Packs\atmel\ATmega_DFP\1.2.150\include" -I"../MPU6050" -I"../SBUS" -I"../Timer" -I"../Uart" -I".."  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega328pb -B "D:\Atmel\Atmel Studio 7.1\7.0\Packs\atmel\ATmega_DFP\1.2.150\gcc\dev\atmega328pb" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
+Timer/PWM_control.o: ../Timer/PWM_control.c
+	@echo Building file: $<
+	@echo Invoking: AVR/GNU C Compiler : 5.4.0
+	$(QUOTE)D:\Atmel\Atmel Studio 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"D:\Atmel\Atmel Studio 7.1\7.0\Packs\atmel\ATmega_DFP\1.2.150\include" -I"../MPU6050" -I"../SBUS" -I"../Timer" -I"../Uart" -I".."  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega328pb -B "D:\Atmel\Atmel Studio 7.1\7.0\Packs\atmel\ATmega_DFP\1.2.150\gcc\dev\atmega328pb" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
+Timer/Timer.o: ../Timer/Timer.c
+	@echo Building file: $<
+	@echo Invoking: AVR/GNU C Compiler : 5.4.0
+	$(QUOTE)D:\Atmel\Atmel Studio 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"D:\Atmel\Atmel Studio 7.1\7.0\Packs\atmel\ATmega_DFP\1.2.150\include" -I"../MPU6050" -I"../SBUS" -I"../Timer" -I"../Uart" -I".."  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega328pb -B "D:\Atmel\Atmel Studio 7.1\7.0\Packs\atmel\ATmega_DFP\1.2.150\gcc\dev\atmega328pb" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
+Timer/Timer3.o: ../Timer/Timer3.c
+	@echo Building file: $<
+	@echo Invoking: AVR/GNU C Compiler : 5.4.0
+	$(QUOTE)D:\Atmel\Atmel Studio 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"D:\Atmel\Atmel Studio 7.1\7.0\Packs\atmel\ATmega_DFP\1.2.150\include" -I"../MPU6050" -I"../SBUS" -I"../Timer" -I"../Uart" -I".."  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega328pb -B "D:\Atmel\Atmel Studio 7.1\7.0\Packs\atmel\ATmega_DFP\1.2.150\gcc\dev\atmega328pb" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
+Timer/Timer4.o: ../Timer/Timer4.c
+	@echo Building file: $<
+	@echo Invoking: AVR/GNU C Compiler : 5.4.0
+	$(QUOTE)D:\Atmel\Atmel Studio 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"D:\Atmel\Atmel Studio 7.1\7.0\Packs\atmel\ATmega_DFP\1.2.150\include" -I"../MPU6050" -I"../SBUS" -I"../Timer" -I"../Uart" -I".."  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega328pb -B "D:\Atmel\Atmel Studio 7.1\7.0\Packs\atmel\ATmega_DFP\1.2.150\gcc\dev\atmega328pb" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
 	@echo Finished building: $<
 	
 
 ./twi_buf_pos.o: .././twi_buf_pos.c
 	@echo Building file: $<
 	@echo Invoking: AVR/GNU C Compiler : 5.4.0
-	$(QUOTE)D:\Atmel\Atmel Studio 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"D:\Atmel\Atmel Studio 7.1\7.0\Packs\atmel\ATmega_DFP\1.2.150\include"  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega328pb -B "D:\Atmel\Atmel Studio 7.1\7.0\Packs\atmel\ATmega_DFP\1.2.150\gcc\dev\atmega328pb" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	$(QUOTE)D:\Atmel\Atmel Studio 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"D:\Atmel\Atmel Studio 7.1\7.0\Packs\atmel\ATmega_DFP\1.2.150\include" -I"../MPU6050" -I"../SBUS" -I"../Timer" -I"../Uart" -I".."  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega328pb -B "D:\Atmel\Atmel Studio 7.1\7.0\Packs\atmel\ATmega_DFP\1.2.150\gcc\dev\atmega328pb" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
 	@echo Finished building: $<
 	
 
-./Uart.o: .././Uart.c
+Uart/RecieveCommands.o: ../Uart/RecieveCommands.c
 	@echo Building file: $<
 	@echo Invoking: AVR/GNU C Compiler : 5.4.0
-	$(QUOTE)D:\Atmel\Atmel Studio 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"D:\Atmel\Atmel Studio 7.1\7.0\Packs\atmel\ATmega_DFP\1.2.150\include"  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega328pb -B "D:\Atmel\Atmel Studio 7.1\7.0\Packs\atmel\ATmega_DFP\1.2.150\gcc\dev\atmega328pb" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	$(QUOTE)D:\Atmel\Atmel Studio 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"D:\Atmel\Atmel Studio 7.1\7.0\Packs\atmel\ATmega_DFP\1.2.150\include" -I"../MPU6050" -I"../SBUS" -I"../Timer" -I"../Uart" -I".."  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega328pb -B "D:\Atmel\Atmel Studio 7.1\7.0\Packs\atmel\ATmega_DFP\1.2.150\gcc\dev\atmega328pb" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
 	@echo Finished building: $<
 	
 
-./Uart_HW.o: .././Uart_HW.c
+Uart/Uart.o: ../Uart/Uart.c
 	@echo Building file: $<
 	@echo Invoking: AVR/GNU C Compiler : 5.4.0
-	$(QUOTE)D:\Atmel\Atmel Studio 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"D:\Atmel\Atmel Studio 7.1\7.0\Packs\atmel\ATmega_DFP\1.2.150\include"  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega328pb -B "D:\Atmel\Atmel Studio 7.1\7.0\Packs\atmel\ATmega_DFP\1.2.150\gcc\dev\atmega328pb" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	$(QUOTE)D:\Atmel\Atmel Studio 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"D:\Atmel\Atmel Studio 7.1\7.0\Packs\atmel\ATmega_DFP\1.2.150\include" -I"../MPU6050" -I"../SBUS" -I"../Timer" -I"../Uart" -I".."  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega328pb -B "D:\Atmel\Atmel Studio 7.1\7.0\Packs\atmel\ATmega_DFP\1.2.150\gcc\dev\atmega328pb" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
+Uart/Uart_HW.o: ../Uart/Uart_HW.c
+	@echo Building file: $<
+	@echo Invoking: AVR/GNU C Compiler : 5.4.0
+	$(QUOTE)D:\Atmel\Atmel Studio 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"D:\Atmel\Atmel Studio 7.1\7.0\Packs\atmel\ATmega_DFP\1.2.150\include" -I"../MPU6050" -I"../SBUS" -I"../Timer" -I"../Uart" -I".."  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega328pb -B "D:\Atmel\Atmel Studio 7.1\7.0\Packs\atmel\ATmega_DFP\1.2.150\gcc\dev\atmega328pb" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
 	@echo Finished building: $<
 	
 
@@ -191,7 +243,35 @@ LINKER_SCRIPT_DEP+=
 ./%.o: .././%.c
 	@echo Building file: $<
 	@echo Invoking: AVR/GNU C Compiler : 5.4.0
-	$(QUOTE)D:\Atmel\Atmel Studio 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"D:\Atmel\Atmel Studio 7.1\7.0\Packs\atmel\ATmega_DFP\1.2.150\include"  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega328pb -B "D:\Atmel\Atmel Studio 7.1\7.0\Packs\atmel\ATmega_DFP\1.2.150\gcc\dev\atmega328pb" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	$(QUOTE)D:\Atmel\Atmel Studio 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"D:\Atmel\Atmel Studio 7.1\7.0\Packs\atmel\ATmega_DFP\1.2.150\include" -I"../MPU6050" -I"../SBUS" -I"../Timer" -I"../Uart" -I".."  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega328pb -B "D:\Atmel\Atmel Studio 7.1\7.0\Packs\atmel\ATmega_DFP\1.2.150\gcc\dev\atmega328pb" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
+MPU6050/%.o: ../MPU6050/%.c
+	@echo Building file: $<
+	@echo Invoking: AVR/GNU C Compiler : 5.4.0
+	$(QUOTE)D:\Atmel\Atmel Studio 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"D:\Atmel\Atmel Studio 7.1\7.0\Packs\atmel\ATmega_DFP\1.2.150\include" -I"../MPU6050" -I"../SBUS" -I"../Timer" -I"../Uart" -I".."  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega328pb -B "D:\Atmel\Atmel Studio 7.1\7.0\Packs\atmel\ATmega_DFP\1.2.150\gcc\dev\atmega328pb" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
+SBUS/%.o: ../SBUS/%.c
+	@echo Building file: $<
+	@echo Invoking: AVR/GNU C Compiler : 5.4.0
+	$(QUOTE)D:\Atmel\Atmel Studio 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"D:\Atmel\Atmel Studio 7.1\7.0\Packs\atmel\ATmega_DFP\1.2.150\include" -I"../MPU6050" -I"../SBUS" -I"../Timer" -I"../Uart" -I".."  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega328pb -B "D:\Atmel\Atmel Studio 7.1\7.0\Packs\atmel\ATmega_DFP\1.2.150\gcc\dev\atmega328pb" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
+Timer/%.o: ../Timer/%.c
+	@echo Building file: $<
+	@echo Invoking: AVR/GNU C Compiler : 5.4.0
+	$(QUOTE)D:\Atmel\Atmel Studio 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"D:\Atmel\Atmel Studio 7.1\7.0\Packs\atmel\ATmega_DFP\1.2.150\include" -I"../MPU6050" -I"../SBUS" -I"../Timer" -I"../Uart" -I".."  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega328pb -B "D:\Atmel\Atmel Studio 7.1\7.0\Packs\atmel\ATmega_DFP\1.2.150\gcc\dev\atmega328pb" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
+Uart/%.o: ../Uart/%.c
+	@echo Building file: $<
+	@echo Invoking: AVR/GNU C Compiler : 5.4.0
+	$(QUOTE)D:\Atmel\Atmel Studio 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"D:\Atmel\Atmel Studio 7.1\7.0\Packs\atmel\ATmega_DFP\1.2.150\include" -I"../MPU6050" -I"../SBUS" -I"../Timer" -I"../Uart" -I".."  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atmega328pb -B "D:\Atmel\Atmel Studio 7.1\7.0\Packs\atmel\ATmega_DFP\1.2.150\gcc\dev\atmega328pb" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
 	@echo Finished building: $<
 	
 

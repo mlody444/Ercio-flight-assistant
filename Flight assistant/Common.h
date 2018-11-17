@@ -18,7 +18,7 @@
 #define Y_AXIS 1
 #define Z_AXIS 2
 
-#define COMMON_TIMERS 1
+#define COMMON_TIMERS 2
 
 #define MPU6050_FS 250
 #define POS_FS 50
@@ -33,15 +33,36 @@
 // 1g^2 * 0.8 = 214748364
 #define G_SPECIAL_MIN 214748364
 
+#define TRIM_MAX_FACTOR 50
+#define SENSITIVITY_MIN 20
+#define SENSITIVITY_MAX 100
 
-int16_t gyro_offset[3];
-int16_t acc_offset[3];
+
+volatile int16_t gyro_offset[3];
+volatile int16_t acc_offset[3];
 
 //pos values are stored as degrees + 100 - avoid double with enough accuracy
-int32_t pos_x;
-int32_t pos_y;
+volatile int32_t pos_x;
+volatile int32_t pos_y;
 
-uint16_t test_counter;
+volatile uint16_t test_counter;
+
+typedef struct
+{
+	union
+	{
+		uint8_t flag_register;
+		struct
+		{
+			uint8_t process_PWMs	: 1;
+			uint8_t unused			: 7;
+		}flag;
+	};
+}EVENT_REGISTER;
+
+extern EVENT_REGISTER events;
+
+void Events(void);
 
 
 void PlaceInGyroBuffor(int16_t samples[3]);

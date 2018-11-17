@@ -114,6 +114,11 @@
   <avrgcc.compiler.directories.IncludePaths>
     <ListValues>
       <Value>%24(PackRepoDir)\atmel\ATmega_DFP\1.2.150\include</Value>
+      <Value>../MPU6050</Value>
+      <Value>../SBUS</Value>
+      <Value>../Timer</Value>
+      <Value>../Uart</Value>
+      <Value>..</Value>
     </ListValues>
   </avrgcc.compiler.directories.IncludePaths>
   <avrgcc.compiler.optimization.level>Optimize (-O1)</avrgcc.compiler.optimization.level>
@@ -143,12 +148,6 @@
     <Compile Include="Common.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="gyro_math.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="gyro_math.h">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="i2c_twi.c">
       <SubType>compile</SubType>
     </Compile>
@@ -158,25 +157,49 @@
     <Compile Include="main.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="MPU6050.c">
+    <Compile Include="MPU6050\gyro_math.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="MPU6050.h">
+    <Compile Include="MPU6050\gyro_math.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="MPU6050_registers.h">
+    <Compile Include="MPU6050\MPU6050.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="RecieveCommands.c">
+    <Compile Include="MPU6050\MPU6050.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="RecieveCommands.h">
+    <Compile Include="MPU6050\MPU6050_registers.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="Timer.c">
+    <Compile Include="SBUS\Sbus.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="Timer.h">
+    <Compile Include="SBUS\Sbus.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Timer\PWM_control.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Timer\PWM_control.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Timer\Timer.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Timer\Timer.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Timer\Timer3.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Timer\Timer3.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Timer\Timer4.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Timer\Timer4.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="twi_buf_pos.c">
@@ -185,18 +208,30 @@
     <Compile Include="twi_buf_pos.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="Uart.c">
+    <Compile Include="Uart\RecieveCommands.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="Uart.h">
+    <Compile Include="Uart\RecieveCommands.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="Uart_HW.c">
+    <Compile Include="Uart\Uart.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="Uart_HW.h">
+    <Compile Include="Uart\Uart.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="Uart\Uart_HW.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Uart\Uart_HW.h">
+      <SubType>compile</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="MPU6050" />
+    <Folder Include="Uart" />
+    <Folder Include="SBUS" />
+    <Folder Include="Timer" />
   </ItemGroup>
   <Import Project="$(AVRSTUDIO_EXE_PATH)\\Vs\\Compiler.targets" />
 </Project>

@@ -19,5 +19,7 @@ void InitCommonTimer(void);
 
 void CheckCommonTimer(void);
 
+void InitPWMTimers(void);
+
 
 #endif /* TIMER_H_ */
