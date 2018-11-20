@@ -7,6 +7,7 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
+#include "Common.h"
 #include "Uart.h"
 #include "Timer.h"
 #include "Sbus.h"
@@ -71,6 +72,8 @@ void InitUartSBUS(void)
 	UBRR1 = 9;	//100k at 16MHz clock
 
 	UCSR1B = (1<<RXCIE1)| (1<<RXEN1);	//Rx interrupt enable
+
+	SendLine("Sbus UART initialized");
 }
 
 void SendSbusBuffor(void)
@@ -85,7 +88,7 @@ void SendSbusBuffor(void)
 ISR (USART1_RX_vect)	//COM Rx
 {
 	uint8_t x = UDR1;
-	
+
 	if (x == 0b00001111 && sbus_last_frame_counter > 3)	//first frame procedure
 	{
 		sbus_position = 0;

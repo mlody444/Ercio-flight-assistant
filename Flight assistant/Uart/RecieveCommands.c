@@ -17,18 +17,23 @@
 #include "Uart_HW.h"
 #include "RecieveCommands.h"
 #include "Common.h"
+#include "Sbus.h"
 
-#define RX_COMMANDS 3	//number of rX commands
+#define RX_COMMANDS 5	//number of rX commands
 
 int8_t er_service(char * params);
 int8_t er_read(char * params);
 int8_t er_buf(char * params);
+int8_t er_dbg(char * params);
+int8_t er_sbus(char * params);
 
 
 const ER_CMD ER_commands [RX_COMMANDS] PROGMEM = {
 	{"ER", er_service},
 	{"ER_READ", er_read},
 	{"ER_BUF", er_buf},
+	{"ER_DBG", er_dbg},
+	{"ER_SBUS", er_sbus},
 };
 
 
@@ -135,5 +140,22 @@ int8_t er_buf(char * params)
  	}
 
 	SendStringInt("S ", SamplesAccBuf());
+	return 0;
+}
+
+int8_t er_dbg(char * params)
+{
+	if (*params == '0')
+		flag1.serial_dbg = 0;
+	else if (*params == '1')
+		flag1.serial_dbg = 1;
+}
+
+int8_t er_sbus(char * params)
+{
+	SendStringUint("Ch 1 ", channel_value[1]);
+	SendStringUint("Ch 2 ", channel_value[2]);
+	SendStringUint("Ch 3 ", channel_value[3]);
+	SendStringUint("Ch 4 ", channel_value[4]);
 	return 0;
 }

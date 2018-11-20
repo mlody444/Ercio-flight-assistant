@@ -28,6 +28,8 @@
 
 int main(void)
 {
+	flag1.bytes = 0;
+	flag1.serial_dbg = 1;
 	pos_x = 0;
 	pos_y = 0;
 //	InitTWI();
@@ -40,12 +42,11 @@ int main(void)
 // 	test = test & 0b01111110;
 
 	InitUartCOM();
-	InitUartSBUS();
 	InitPWMTimers();
 	sei();
 	SendLine("Uart dziala");
 
-	test_counter = 200;
+	calculate_position_counter = 200;
 
 	CalibrateMPU6050(gyro_offset, acc_offset);
 
@@ -57,6 +58,8 @@ int main(void)
 	InitMPU6050();
 	InitCommonTimer();
 	InitTrimming();
+
+	InitUartSBUS();
 
     while (1) 
     {

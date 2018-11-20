@@ -18,7 +18,7 @@
 #define Y_AXIS 1
 #define Z_AXIS 2
 
-#define COMMON_TIMERS 2
+#define COMMON_TIMERS 4
 
 #define MPU6050_FS 250
 #define POS_FS 50
@@ -45,7 +45,24 @@ volatile int16_t acc_offset[3];
 volatile int32_t pos_x;
 volatile int32_t pos_y;
 
-volatile uint16_t test_counter;
+volatile uint16_t calculate_position_counter;
+volatile uint16_t send_position_counter;
+volatile uint16_t additional_timer;
+
+typedef struct
+{
+	union
+	{
+		uint8_t bytes;
+		struct
+		{
+			uint8_t serial_dbg	: 1;
+			uint8_t unused		: 7;
+		};
+	};
+}FLAG1;
+
+volatile FLAG1 flag1;
 
 typedef struct
 {
