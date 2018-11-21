@@ -16,10 +16,9 @@ typedef struct
 }TIMER_DECREMENT;
 
 void InitCommonTimer(void);
-
 void CheckCommonTimer(void);
-
 void InitPWMTimers(void);
 
+extern uint16_t dbg_counter;
 
 #endif /* TIMER_H_ */

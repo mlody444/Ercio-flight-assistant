@@ -18,7 +18,7 @@ Uart/RecieveCommands.d Uart/RecieveCommands.o: ../Uart/RecieveCommands.c \
  d:\atmel\atmel\ studio\ 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\util\delay_basic.h \
  d:\atmel\atmel\ studio\ 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\math.h \
  ../Uart/Uart.h ../Uart/Uart_HW.h ../Uart/RecieveCommands.h ../Common.h \
- ../SBUS/Sbus.h
+ ../SBUS/Sbus.h ../Timer/Timer.h
 
 d:\atmel\atmel\ studio\ 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\io.h:
 
@@ -65,3 +65,5 @@ d:\atmel\atmel\ studio\ 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\ma
 ../Common.h:
 
 ../SBUS/Sbus.h:
+
+../Timer/Timer.h:

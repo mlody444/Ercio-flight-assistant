@@ -18,6 +18,7 @@
 #include "RecieveCommands.h"
 #include "Common.h"
 #include "Sbus.h"
+#include "Timer.h"	//DBG counter used for data sending over serial port
 
 #define RX_COMMANDS 5	//number of rX commands
 
@@ -145,10 +146,7 @@ int8_t er_buf(char * params)
 
 int8_t er_dbg(char * params)
 {
-	if (*params == '0')
-		flag1.serial_dbg = 0;
-	else if (*params == '1')
-		flag1.serial_dbg = 1;
+	EnableDebug();
 }
 
 int8_t er_sbus(char * params)

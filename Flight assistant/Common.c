@@ -12,6 +12,8 @@
 #include "PWM_control.h"
 #include "Sbus.h"
 #include "Timer3.h"
+#include "Timer.h"	//DBG counter used for data sending over serial port
+
 
 #define SAMPLES SAMPLES_BUFF_SIZE + 1
 
@@ -99,16 +101,26 @@ void ReadAccSample(int16_t reading_buf[])
 
 void ReadGyroSample_ViewOnly(int16_t reading_buf[])
 {
-	reading_buf[0] = X_gyro_buff[(gyro_head - 1)];
-	reading_buf[1] = Y_gyro_buff[(gyro_head - 1)];
-	reading_buf[2] = Z_gyro_buff[(gyro_head - 1)];
+	uint8_t temporary = gyro_head;
+	temporary--;
+	if (temporary == 0xff)
+		temporary = SAMPLES_BUFF_SIZE;
+
+	reading_buf[0] = X_gyro_buff[temporary];
+	reading_buf[1] = Y_gyro_buff[temporary];
+	reading_buf[2] = Z_gyro_buff[temporary];
 }
 
 void ReadAccSample_ViewOnly(int16_t reading_buf[])
 {
-	reading_buf[0] = X_acc_buff[(acc_head - 1)];
-	reading_buf[1] = Y_acc_buff[(acc_head - 1)];
-	reading_buf[2] = Z_acc_buff[(acc_head - 1)];
+	uint8_t temporary = acc_head;
+	temporary--;
+	if (temporary == 0xff)
+		temporary = SAMPLES_BUFF_SIZE;
+
+	reading_buf[0] = X_acc_buff[temporary];
+	reading_buf[1] = Y_acc_buff[temporary];
+	reading_buf[2] = Z_acc_buff[temporary];
 }
 
 uint8_t SamplesGyroBuf()
@@ -339,4 +351,11 @@ void Process_trimming(void)
 		}
 		break;
 	}
+}
+
+/*Serial debug is enabled for 10 sec*/
+void EnableDebug(void)
+{
+	dbg_counter = 10000;
+	flag1.serial_dbg = 1;
 }

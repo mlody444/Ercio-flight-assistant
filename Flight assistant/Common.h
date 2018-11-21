@@ -18,7 +18,7 @@
 #define Y_AXIS 1
 #define Z_AXIS 2
 
-#define COMMON_TIMERS 4
+#define COMMON_TIMERS 5
 
 #define MPU6050_FS 250
 #define POS_FS 50
@@ -104,5 +104,6 @@ void ReadAccBufAveraged(int16_t gyro[3]);
 void AveragingLinearMPU6050(int16_t data[3][SAMPLES_BUFF_SIZE], uint8_t samples, int16_t results[3]);
 void AveragingWeightingMPU6050(int16_t data[3][SAMPLES_BUFF_SIZE], uint8_t samples, int16_t results[3]);
 
+void EnableDebug(void);
 
 #endif /* COMMON_H_ */

@@ -5,7 +5,7 @@
  * Author : Bartek
  */
 
- #define F_CPU 16000000L
+#define F_CPU 16000000L
 
 #include <avr/io.h>
 #include <math.h>
@@ -38,9 +38,6 @@ int main(void)
 	TWBR0 = 0x0C;
 	TWCR0 = (1<<TWEN);	//enable TWI
 
-// 	test = I2C_read_byte(0x68, 0x75);
-// 	test = test & 0b01111110;
-
 	InitUartCOM();
 	InitPWMTimers();
 	sei();
@@ -58,7 +55,6 @@ int main(void)
 	InitMPU6050();
 	InitCommonTimer();
 	InitTrimming();
-
 	InitUartSBUS();
 
     while (1) 

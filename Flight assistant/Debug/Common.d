@@ -11,7 +11,8 @@ Common.d Common.o: .././Common.c \
  d:\atmel\atmel\ studio\ 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\fuse.h \
  d:\atmel\atmel\ studio\ 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\lock.h \
  d:\atmel\atmel\ studio\ 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\math.h \
- .././Common.h ../Timer/PWM_control.h ../SBUS/Sbus.h ../Timer/Timer3.h
+ .././Common.h ../Timer/PWM_control.h ../SBUS/Sbus.h ../Timer/Timer3.h \
+ ../Timer/Timer.h
 
 d:\atmel\atmel\ studio\ 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\io.h:
 
@@ -44,3 +45,5 @@ d:\atmel\atmel\ studio\ 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\ma
 ../SBUS/Sbus.h:
 
 ../Timer/Timer3.h:
+
+../Timer/Timer.h:
