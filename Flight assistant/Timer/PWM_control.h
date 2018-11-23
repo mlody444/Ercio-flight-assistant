@@ -12,13 +12,12 @@
 #define PWM_MIN 17000
 #define PWM_MAX 32000
 #define ELEVON_MID 24500
-#define ELEVON_RANGE 7000
+#define ELEVON_RANGE 8000
 
-#define THROTLE_MIN 15000
-#define THROTLE_MAX 30000
+#define THROTLE_MIN 20000
+#define THROTLE_MAX 27500
 
 #define MID_PWM  22000
-#define TRIM_MAX  2000
 
 #define PWM_THROTLE	0
 #define PWM_LEFT	1
@@ -49,10 +48,9 @@ typedef enum
 
 typedef enum
 {
-	Reset_Roll,
-	Reset_Pitch,
-	Reset_None,
-} trim_resetor;
+	MOD_manual,
+	MOD_gyro,
+} FLIGHT_MODE;
 
 typedef struct
 {
@@ -74,11 +72,13 @@ typedef struct
 	int16_t  roll;
 	int16_t  pitch;
 	int16_t yaw;
-	trim_selector  trim_select;
-	int16_t  trim_value;
-	uint8_t  buzzer;
-	uint16_t  sensitivity;
-	trim_resetor trim_reset;
+	int16_t roll_trim_manual;
+	int16_t pitch_trim_manual;
+	int16_t roll_trim_gyro;
+	int16_t pitch_trim_gyro;
+	uint8_t buzzer;
+	FLIGHT_MODE flight_mode;
+	uint16_t sensitivity;
 }CHANNELS;
 
 extern CHANNELS channel_old, channel_new;

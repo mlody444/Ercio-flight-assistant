@@ -13,13 +13,13 @@
 #include "Sbus.h"
 #include "Timer3.h"
 #include "Timer.h"	//DBG counter used for data sending over serial port
+#include "Ercio.h"	//RF channel defined
 
 
 #define SAMPLES SAMPLES_BUFF_SIZE + 1
 
 void ProcessPWMs(void);
 void Read_Channels(CHANNELS *channels);
-void Process_trimming(void);
 
 EVENT_REGISTER events;
 
@@ -256,22 +256,45 @@ void ProcessPWMs(void)
 {
 	channel_old = channel_new;
 	Read_Channels(&channel_new);
-	Process_trimming();
 
 	//Set PWMs
-	uint16_t sensitivity = (uint16_t)(((uint32_t)410 + (uint32_t)channel_new.sensitivity) * 10) / 203;	//div by 2025
+	if (channel_new.flight_mode == MOD_manual)
+	{													//+1 to make 20, without is 19.9->19
+		uint16_t sensitivity = (uint16_t)(((uint32_t)(channel_new.sensitivity+1) * 100) / 819);
 
-	int16_t roll = ((int32_t)channel_new.roll * ELEVON_RANGE/2) / 820;
-	int16_t pitch = ((int32_t)channel_new.pitch * ELEVON_RANGE/2) / 820;
+		int16_t stick_roll = ((int32_t)channel_new.roll * ELEVON_RANGE/2) / 820;
+		int16_t stick_pitch = ((int32_t)channel_new.pitch * ELEVON_RANGE/2) / 820;
+		if (sensitivity != 100)
+		{
+			stick_roll  = (int16_t)(((int32_t)stick_roll  * sensitivity)/100);
+			stick_pitch = (int16_t)(((int32_t)stick_pitch * sensitivity)/100);
+		}
 
-	uint32_t left_pwm	= MID_PWM - roll - ram_trim.roll - pitch - ram_trim.pitch;
-	uint32_t right_pwm	= MID_PWM - roll - ram_trim.roll + pitch + ram_trim.pitch;
-	uint32_t throtle	= THROTLE_MIN + channel_new.throtle * 7;
+		int16_t trim_roll = ((int32_t)channel_new.roll_trim_manual * ELEVON_RANGE/2) / 820;
+		int16_t trim_pitch = ((int32_t)channel_new.pitch_trim_manual * ELEVON_RANGE/2) / 820;
 
-	pwm_channels[0].counter = throtle;
+		int16_t roll  = stick_roll  + trim_roll;
+		int16_t pitch = stick_pitch + trim_pitch;
 
-	pwm_channels[1].counter = left_pwm;
-	pwm_channels[2].counter = right_pwm;
+		uint32_t left_pwm  = MID_PWM - roll - pitch;
+		uint32_t right_pwm = MID_PWM - roll + pitch;
+		uint32_t throtle   = THROTLE_MIN + (channel_new.throtle*4)/5;
+
+ 		pwm_channels[0].counter = throtle;
+ 		pwm_channels[1].counter = left_pwm;
+ 		pwm_channels[2].counter = right_pwm;
+	}
+	else	//mode gyro
+	{
+		pwm_channels[0].counter = THROTLE_MIN;
+		pwm_channels[1].counter = MID_PWM;
+		pwm_channels[2].counter = MID_PWM;
+	}
+
+	if (channel_new.buzzer)
+		LED_ON;
+	else
+		LED_OFF;
 }
 
 void Read_Channels(CHANNELS *channels)
@@ -282,75 +305,22 @@ void Read_Channels(CHANNELS *channels)
 	channels->yaw		= channel_value[4] - 992;
 	channels->bit_values= channel_value[0];
 	
-	
-	if (channel_value[6] < 582)
-	channels->trim_select = Roll;
+	channels->roll_trim_manual  = channel_value[5] - 992;
+	channels->pitch_trim_manual = channel_value[6] - 992;
+	channels->roll_trim_gyro    = channel_value[7] - 992;
+	channels->pitch_trim_gyro   = channel_value[8] - 992;
 
-	else if (channel_value[6] > 1574)
-	channels->trim_select = Pitch;
-
+	if (channel_value[9] < 992)
+		channels->buzzer = 0;
 	else
-	channels->trim_select = None;
-	
-	channels->trim_value = ((int16_t)channel_value[7] - 992) / TRIM_MAX_FACTOR;
+		channels->buzzer = 1;
 
-	if (channel_value[9] > 992)
-	channels->buzzer = 1;
-	
+	if (channel_value[10] < 992)
+		channels->flight_mode = MOD_gyro;
 	else
-	channels->buzzer = 0;
+		channels->flight_mode = MOD_manual;
 
-	uint16_t sens_help = (channel_value[8] - 172);
-
-	channels->sensitivity = (uint16_t) sens_help;
-	
-
-
-	if (channel_value[10] < 582)
-	channels->trim_reset = Reset_Roll;
-
-	else if (channel_value[10] > 1574)
-	channels->trim_reset = Reset_Pitch;
-
-	else
-	channels->trim_reset = Reset_None;
-}
-
-void Process_trimming(void)
-{
-	switch (channel_new.trim_select)
-	{
-		case Roll:
-		ram_trim.roll = ram_trim.roll + channel_new.trim_value;
-
-		if (ram_trim.roll > TRIM_MAX)
-		{
-			ram_trim.roll = TRIM_MAX;
-		}
-		else if (ram_trim.roll < - TRIM_MAX)
-		{
-			ram_trim.roll = - TRIM_MAX;
-		}
-		break;
-
-		case Pitch:
-		ram_trim.pitch = ram_trim.pitch + channel_new.trim_value;
-		if (ram_trim.pitch > TRIM_MAX)
-		{
-			ram_trim.pitch = TRIM_MAX;
-		}
-		else if (ram_trim.pitch < - TRIM_MAX)
-		{
-			ram_trim.pitch = - TRIM_MAX;
-		}
-		break;
-		case None:
-		if (channel_old.trim_select != None)	//process saving to EEPROM
-		{
-			eeprom_write_block(&ram_trim, &eem_trim, sizeof(ram_trim));
-		}
-		break;
-	}
+	channels->sensitivity = channel_value[11] - 992;
 }
 
 /*Serial debug is enabled for 10 sec*/

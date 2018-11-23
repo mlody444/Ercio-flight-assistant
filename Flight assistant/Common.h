@@ -33,11 +33,6 @@
 // 1g^2 * 0.8 = 214748364
 #define G_SPECIAL_MIN 214748364
 
-#define TRIM_MAX_FACTOR 50
-#define SENSITIVITY_MIN 20
-#define SENSITIVITY_MAX 100
-
-
 volatile int16_t gyro_offset[3];
 volatile int16_t acc_offset[3];
 

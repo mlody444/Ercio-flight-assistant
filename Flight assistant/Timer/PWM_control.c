@@ -6,15 +6,14 @@
  */ 
 
 
- #include <avr/io.h>
- #include <avr/eeprom.h>
+#include <avr/io.h>
+#include <avr/eeprom.h>
 
- #include "PWM_control.h"
- #include "Uart.h"
+#include "PWM_control.h"
+#include "Uart.h"
 
 TRIM ram_trim;
 TRIM eem_trim;
-
 
 CHANNELS channel_old, channel_new;
 uint8_t sbus_frame_delay;

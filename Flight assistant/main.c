@@ -34,12 +34,12 @@ int main(void)
 	pos_y = 0;
 //	InitTWI();
 	DDRB = (1<<PB5);
+	DDRC |= (1<<PC0) | (1<<PC1)| (1<<PC2);
 	TWSR0 = 0x00;
 	TWBR0 = 0x0C;
 	TWCR0 = (1<<TWEN);	//enable TWI
 
 	InitUartCOM();
-	InitPWMTimers();
 	sei();
 	SendLine("Uart dziala");
 
@@ -56,11 +56,13 @@ int main(void)
 	InitCommonTimer();
 	InitTrimming();
 	InitUartSBUS();
+	InitPWMTimers();
 
     while (1) 
     {
 		CheckRxBuffor();
 		ReadMPU6050();
 		CheckCommonTimer();
+		Events();
     }
 }
