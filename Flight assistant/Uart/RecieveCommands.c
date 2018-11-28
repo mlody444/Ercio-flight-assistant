@@ -139,8 +139,6 @@ int8_t er_buf(char * params)
 		SendStringInt("A Y ", data[1]);
 		SendStringInt("A Z ", data[2]);
  	}
-
-	SendStringInt("S ", SamplesAccBuf());
 	return 0;
 }
 

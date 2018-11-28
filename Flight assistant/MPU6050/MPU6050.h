@@ -13,5 +13,7 @@ void CalibrateMPU6050(int16_t gyro_offset[], int16_t acc_offset[]);
 
 void InitMPU6050(void);
 
+void ReadMPU6050(void);
+
 
 #endif /* MPU6050_H_ */

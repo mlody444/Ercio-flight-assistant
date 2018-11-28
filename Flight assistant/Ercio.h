@@ -20,6 +20,11 @@
 #define BUZZER	 9
 #define FLY_MODE 10
 #define SENS	 11
+#define G_GAIN	 12
+#define P_GAIN	 13
+#define I_GAIN	 14
+#define D_GAIN	 15
+#define RESET	 16
 
 
 #endif /* ERCIO_H_ */

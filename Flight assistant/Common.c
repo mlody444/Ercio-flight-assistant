@@ -14,12 +14,16 @@
 #include "Timer3.h"
 #include "Timer.h"	//DBG counter used for data sending over serial port
 #include "Ercio.h"	//RF channel defined
+#include "gyro_math.h"	//used to initialiaze variables
+#include "Uart.h"
 
 
 #define SAMPLES SAMPLES_BUFF_SIZE + 1
 
 void ProcessPWMs(void);
 void Read_Channels(CHANNELS *channels);
+
+void (*resetptr)( void ) = 0x0000;
 
 EVENT_REGISTER events;
 
@@ -40,6 +44,25 @@ uint8_t acc_tail = 0;
 
 uint8_t counter_testing = 0;
 
+uint8_t reset_counter;
+
+void InitVariables(void)
+{
+	pid_roll.i_mem = 0;
+	pid_roll.last_error = 0;
+	pid_pitch.i_mem = 0;
+	pid_pitch.last_error = 0;
+
+	additional_timer = 40;
+	calculate_position_counter = 200;
+	send_position_counter = 40;
+
+	flag1.bytes = 0;
+	flag1.serial_dbg = 0;
+
+	pos_x = 0;
+	pos_y = 0;
+}
 
 void PlaceInGyroBuffor(int16_t gyro_samples[])
 {
@@ -257,44 +280,105 @@ void ProcessPWMs(void)
 	channel_old = channel_new;
 	Read_Channels(&channel_new);
 
-	//Set PWMs
-	if (channel_new.flight_mode == MOD_manual)
-	{													//+1 to make 20, without is 19.9->19
-		uint16_t sensitivity = (uint16_t)(((uint32_t)(channel_new.sensitivity+1) * 100) / 819);
+	pid_roll.P_gain = channel_new.p_gain;
+	pid_roll.I_gain = channel_new.i_gain;
+	pid_roll.D_gain = channel_new.d_gain;
 
-		int16_t stick_roll = ((int32_t)channel_new.roll * ELEVON_RANGE/2) / 820;
-		int16_t stick_pitch = ((int32_t)channel_new.pitch * ELEVON_RANGE/2) / 820;
-		if (sensitivity != 100)
-		{
-			stick_roll  = (int16_t)(((int32_t)stick_roll  * sensitivity)/100);
-			stick_pitch = (int16_t)(((int32_t)stick_pitch * sensitivity)/100);
-		}
-
-		int16_t trim_roll = ((int32_t)channel_new.roll_trim_manual * ELEVON_RANGE/2) / 820;
-		int16_t trim_pitch = ((int32_t)channel_new.pitch_trim_manual * ELEVON_RANGE/2) / 820;
-
-		int16_t roll  = stick_roll  + trim_roll;
-		int16_t pitch = stick_pitch + trim_pitch;
-
-		uint32_t left_pwm  = MID_PWM - roll - pitch;
-		uint32_t right_pwm = MID_PWM - roll + pitch;
-		uint32_t throtle   = THROTLE_MIN + (channel_new.throtle*4)/5;
-
- 		pwm_channels[0].counter = throtle;
- 		pwm_channels[1].counter = left_pwm;
- 		pwm_channels[2].counter = right_pwm;
-	}
-	else	//mode gyro
+	pid_pitch.P_gain = channel_new.p_gain;
+	pid_pitch.I_gain = channel_new.i_gain;
+	pid_pitch.D_gain = channel_new.d_gain;
+	
+	if (channel_new.bits.failsafe)	//failsafe - set to default for safety resons
 	{
+		BUZ_TGL;
 		pwm_channels[0].counter = THROTLE_MIN;
 		pwm_channels[1].counter = MID_PWM;
 		pwm_channels[2].counter = MID_PWM;
 	}
 
-	if (channel_new.buzzer)
-		LED_ON;
-	else
-		LED_OFF;
+	else	//normal conditions
+	{
+		uint32_t left_pwm, right_pwm, throtle;
+		int16_t trim_roll, trim_pitch, roll, pitch;
+
+		if (channel_new.reset)
+		{
+			reset_counter++;
+
+			if (reset_counter == 0xFF)
+				resetptr();
+		}
+		else
+			reset_counter = 0;
+
+		//Set PWMs
+		throtle   = THROTLE_MIN + ((uint32_t)channel_new.throtle*9)/2;
+
+		if (channel_new.flight_mode == MOD_manual)
+		{													//+1 to make 20, without is 19.9->19
+			uint16_t sensitivity = (uint16_t)(((uint32_t)(channel_new.sensitivity+1) * 100) / 819);
+
+			int16_t stick_roll = ((int32_t)channel_new.roll * ELEVON_RANGE/2) / 820;
+			int16_t stick_pitch = ((int32_t)channel_new.pitch * ELEVON_RANGE/2) / 820;
+			if (sensitivity != 100)
+			{
+				stick_roll  = (int16_t)(((int32_t)stick_roll  * sensitivity)/100);
+				stick_pitch = (int16_t)(((int32_t)stick_pitch * sensitivity)/100);
+			}
+
+			trim_roll = ((int32_t)channel_new.roll_trim_manual * ELEVON_RANGE/2) / 820;
+			trim_pitch = ((int32_t)channel_new.pitch_trim_manual * ELEVON_RANGE/2) / 820;
+
+			roll  = stick_roll  + trim_roll;
+			pitch = stick_pitch + trim_pitch;
+				
+			if (channel_new.reset)
+				throtle = 17000;
+		}
+		else	//GYRO MODE
+		{
+			roll = (channel_new.roll + channel_new.roll_trim_gyro) * 5.5;
+			int32_t roll_pid_value = ProcessPID(pos_y, -roll, &pid_roll);
+			roll_pid_value = -roll_pid_value / channel_new.gyro_gain;
+			if (roll_pid_value > 10000)	roll = 10000;
+			else if (roll_pid_value < -10000) roll = -10000;
+			else	roll = roll_pid_value;
+
+			pitch = (channel_new.pitch + channel_new.pitch_trim_gyro) * 5.5;
+			int32_t pitch_pid_value = ProcessPID(pos_x, pitch, &pid_pitch);
+			pitch_pid_value = pitch_pid_value / channel_new.gyro_gain;
+			if (pitch_pid_value > 10000)	pitch = 10000;
+			else if (pitch_pid_value < -10000) pitch = -10000;
+			else	pitch = pitch_pid_value;
+			
+			SendStringInt("S ", roll_pid_value);
+			SendStringInt("PR ", pitch_pid_value);
+		}
+
+		left_pwm  = MID_PWM - roll - pitch;
+		if (left_pwm > PWM_MAX)	left_pwm = PWM_MAX;
+		if (left_pwm < PWM_MIN) left_pwm = PWM_MIN;
+
+		right_pwm = MID_PWM - roll + pitch;
+		if (right_pwm > PWM_MAX) right_pwm = PWM_MAX;
+		if (right_pwm < PWM_MIN) right_pwm = PWM_MIN;
+
+		if		(left_pwm > PWM_MAX)	left_pwm = PWM_MAX;
+		else if (left_pwm < PWM_MIN)	left_pwm = PWM_MIN;
+
+		if		(right_pwm > PWM_MAX)	right_pwm = PWM_MAX;
+		else if (right_pwm < PWM_MIN)	right_pwm = PWM_MIN;
+
+/*set PWM counters*/
+		pwm_channels[0].counter = throtle;
+		pwm_channels[1].counter = left_pwm;
+		pwm_channels[2].counter = right_pwm;
+
+		if (channel_new.buzzer)
+			BUZ_ON;
+		else
+			BUZ_OFF;			
+	}
 }
 
 void Read_Channels(CHANNELS *channels)
@@ -321,6 +405,41 @@ void Read_Channels(CHANNELS *channels)
 		channels->flight_mode = MOD_manual;
 
 	channels->sensitivity = channel_value[11] - 992;
+
+	uint16_t gyro_gain = (channel_value[G_GAIN] - 991)*5/41;
+	gyro_gain = 100 - gyro_gain;
+	if (gyro_gain == 0)	gyro_gain = 1;
+
+	channels->gyro_gain = gyro_gain;
+
+/* P multiplayer */
+	if (channel_value[P_GAIN] == 172)
+		channels->p_gain = 450;
+	else if (channel_value[P_GAIN] == 992)
+		channels->p_gain = 150;
+	else
+		channels->p_gain = 0;
+
+/* I multiplayer */
+	if (channel_value[I_GAIN] == 172)
+		channels->i_gain = 3;
+	else if (channel_value[I_GAIN] == 992)
+		channels->i_gain = 1;
+	else
+		channels->i_gain = 0;
+
+/* D multiplayer */
+	if (channel_value[D_GAIN] == 172)
+		channels->d_gain = 75;
+	else if (channel_value[D_GAIN] == 992)
+		channels->d_gain = 25;
+	else
+		channels->d_gain = 0;
+
+	if (channel_value[16] == 1811)
+		channels->reset = 1;
+	else
+		channels->reset = 0;
 }
 
 /*Serial debug is enabled for 10 sec*/

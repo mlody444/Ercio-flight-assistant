@@ -13,6 +13,10 @@
 #define LED_OFF	PORTB &= ~(1<<PB5)
 #define LED_TGL	PORTB ^= (1<<PB5)
 
+#define BUZ_ON	PORTB &= ~(1<<PB1)
+#define BUZ_OFF	PORTB |= (1<<PB1)
+#define BUZ_TGL	PORTB ^= (1<<PB1) 
+
 #define SAMPLES_BUFF_SIZE 20
 #define X_AXIS 0
 #define Y_AXIS 1
@@ -74,8 +78,9 @@ typedef struct
 
 extern EVENT_REGISTER events;
 
-void Events(void);
+void InitVariables(void);
 
+void Events(void);
 
 void PlaceInGyroBuffor(int16_t samples[3]);
 void PlaceInAccBuffor(int16_t samples[3]);

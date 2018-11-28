@@ -28,35 +28,37 @@
 
 int main(void)
 {
-	flag1.bytes = 0;
-	flag1.serial_dbg = 1;
-	pos_x = 0;
-	pos_y = 0;
+	InitVariables();
+
 //	InitTWI();
-	DDRB = (1<<PB5);
+	DDRB  = (1<<PB5);
+	DDRB |= (1<<PB1);		//PB1 - buzer
 	DDRC |= (1<<PC0) | (1<<PC1)| (1<<PC2);
 	TWSR0 = 0x00;
 	TWBR0 = 0x0C;
 	TWCR0 = (1<<TWEN);	//enable TWI
 
+	LED_OFF;
+	BUZ_OFF;
+	for (uint8_t i=0; i<11; i++){
+		LED_TGL;
+		BUZ_TGL;
+		_delay_ms(200);
+	}
+
 	InitUartCOM();
 	sei();
 	SendLine("Uart dziala");
 
-	calculate_position_counter = 200;
-
 	CalibrateMPU6050(gyro_offset, acc_offset);
-
-	for (uint8_t i=0; i<10; i++){
-		LED_TGL;
-		_delay_ms(100);
-	}
 
 	InitMPU6050();
 	InitCommonTimer();
-	InitTrimming();
 	InitUartSBUS();
 	InitPWMTimers();
+
+	LED_OFF;
+	BUZ_OFF;
 
     while (1) 
     {

@@ -13,8 +13,8 @@
 #define RX_SIZE 32
 #define RX_CR_SIZE 8
 
-#define TX_SIZE_BIN 0b01111111
-#define TX_SIZE 128
+#define TX_SIZE_BIN 0b11111111
+#define TX_SIZE 256
 
 extern char RxBuffor[RX_SIZE];
 extern char TxBuffor[TX_SIZE];

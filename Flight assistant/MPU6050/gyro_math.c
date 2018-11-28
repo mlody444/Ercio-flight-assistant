@@ -96,3 +96,29 @@ int32_t CalculateNewPos(double pos_acc, int32_t pos_gyro, int32_t pos_total, uin
 		return pos_acc_calc + temporary;
 	}
 }
+
+int32_t ProcessPID(int32_t pos_actual, int32_t pos_set, PID_PARAMETERS * PID)
+{
+	int32_t error_temp = pos_set - pos_actual;
+	int32_t result;
+	
+	if (PID->I_gain){
+		PID->i_mem += PID->I_gain * error_temp;
+
+		if (PID->i_mem > ((int32_t)PID->P_gain * 500)){
+			PID->i_mem = (int32_t)PID->P_gain * 500;
+		}
+		else if (PID->i_mem < -((int32_t)PID->P_gain * 500)){
+			PID->i_mem = -(int32_t)PID->P_gain * 500;
+		}
+	}
+	else{
+		PID->i_mem = 0;
+	}
+
+	result = PID->P_gain * error_temp + PID->i_mem + PID->D_gain*(error_temp - PID->last_error);
+
+	PID->last_error = error_temp;
+
+	return result;
+}

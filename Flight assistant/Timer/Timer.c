@@ -22,6 +22,8 @@
 #include "Timer3.h"
 #include "Timer4.h"
 
+#include "gyro_math.h"	//variables used to calculate PID, finally this include shouldn't be required
+
 #define POS_FS 50
 #define POS_TIMING (1000 / POS_FS)
 
@@ -121,6 +123,10 @@ void AdditionalFunction(void)
 		SendStringUint("Ch 9 ",  channel_value[9]);
 		SendStringUint("Ch 10 ", channel_value[10]);
 		SendStringUint("Ch 11 ", channel_value[11]);
+		SendStringUint("Ch 12 ", channel_value[12]);
+		SendStringUint("Ch 13 ", channel_value[13]);
+		SendStringUint("Ch 14 ", channel_value[14]);
+		SendStringUint("Ch 15 ", channel_value[15]);
 
 		int16_t gyro[3];
 		int16_t acc[3];
@@ -131,8 +137,8 @@ void AdditionalFunction(void)
 		SendStringInt("G Y ", gyro[1]);
 		SendStringInt("G Z ", gyro[2]);
 		SendStringInt("A X ", acc[0]);
-		SendStringInt("A Y ", acc[1]);
 		SendStringInt("A Z ", acc[2]);
+		SendStringInt("A Y ", acc[1]);
 	}
 }
 

@@ -14,7 +14,7 @@
 #define ELEVON_MID 24500
 #define ELEVON_RANGE 8000
 
-#define THROTLE_MIN 20000
+#define THROTLE_MIN 19500
 #define THROTLE_MAX 27500
 
 #define MID_PWM  22000
@@ -23,28 +23,11 @@
 #define PWM_LEFT	1
 #define PWM_RIGHT	2
 
-
-typedef struct {
-	int16_t roll;
-	int16_t pitch;
-}TRIM;
-
-
 typedef struct{
 	uint16_t PWM;
 	uint8_t *PORT;
 	uint8_t mask;
 }PWM_TIMER;
-
-extern TRIM ram_trim;
-extern TRIM eem_trim;
-
-typedef enum
-{
-	Roll,
-	Pitch,
-	None,
-} trim_selector;
 
 typedef enum
 {
@@ -79,12 +62,17 @@ typedef struct
 	uint8_t buzzer;
 	FLIGHT_MODE flight_mode;
 	uint16_t sensitivity;
+	uint8_t gyro_gain;
+	uint16_t p_gain;
+	uint16_t i_gain;
+	uint16_t d_gain;
+	uint8_t reset;
 }CHANNELS;
 
 extern CHANNELS channel_old, channel_new;
 extern uint8_t sbus_frame_delay;
 
-extern PWM_TIMER pwm_timers [3];
+extern PWM_TIMER pwm_timers[3];
 
 void InitTrimming(void);
 

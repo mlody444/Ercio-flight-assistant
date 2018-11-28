@@ -12,7 +12,7 @@ Common.d Common.o: .././Common.c \
  d:\atmel\atmel\ studio\ 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\lock.h \
  d:\atmel\atmel\ studio\ 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\math.h \
  .././Common.h ../Timer/PWM_control.h ../SBUS/Sbus.h ../Timer/Timer3.h \
- ../Timer/Timer.h .././Ercio.h
+ ../Timer/Timer.h .././Ercio.h ../MPU6050/gyro_math.h ../Uart/Uart.h
 
 d:\atmel\atmel\ studio\ 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\io.h:
 
@@ -49,3 +49,7 @@ d:\atmel\atmel\ studio\ 7.1\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\ma
 ../Timer/Timer.h:
 
 .././Ercio.h:
+
+../MPU6050/gyro_math.h:
+
+../Uart/Uart.h:

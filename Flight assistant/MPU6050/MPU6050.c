@@ -49,10 +49,9 @@ void CalibrateMPU6050(int16_t gyro_offset[], int16_t acc_offset[])
 	// Configure MPU6050 gyro and accelerometer for bias calculation
 	I2C_write_byte(MPU6050_ADDRESS, CONFIG, 0x01);      // Set low-pass filter to 188 Hz
 	I2C_write_byte(MPU6050_ADDRESS, SMPLRT_DIV, 0x00);  // Set sample rate to 1 kHz
-	I2C_write_byte(MPU6050_ADDRESS, GYRO_CONFIG, 0x00);  // Set gyro full-scale to 250 degrees per second, maximum sensitivity
+	I2C_write_byte(MPU6050_ADDRESS, GYRO_CONFIG, 0x08);  // Set gyro to 500 degrees per second
 	I2C_write_byte(MPU6050_ADDRESS, ACCEL_CONFIG, 0x00); // Set accelerometer full-scale to 2 g, maximum sensitivity
 
-	uint16_t  gyrosensitivity  = 131;   // = 131 LSB/degrees/sec
 	uint16_t  accelsensitivity = 16384;  // = 16384 LSB/g
 
 	// Configure FIFO to capture accelerometer and gyro data for bias calculation
@@ -137,7 +136,6 @@ void InitMPU6050(void)
 	_delay_ms(15);
 
 	// Configure MPU6050 gyro and accelerometer for bias calculation
-	uint8_t fs = 1000 / MPU6050_FS;
 	I2C_write_byte(MPU6050_ADDRESS, CONFIG, 0x03);       // Set low-pass filter to 44 Hz
 	I2C_write_byte(MPU6050_ADDRESS, SMPLRT_DIV, MPU6050_TIMING);	 // Set sample rate to be set in common.h
 	I2C_write_byte(MPU6050_ADDRESS, GYRO_CONFIG, 0x08);  // Set gyro full-scale to 500 degrees per second - MPU6050_LSB
