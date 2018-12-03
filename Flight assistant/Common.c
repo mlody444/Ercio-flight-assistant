@@ -408,6 +408,7 @@ void Read_Channels(CHANNELS *channels)
 
 	uint16_t gyro_gain = (channel_value[G_GAIN] - 991)*5/41;
 	gyro_gain = 100 - gyro_gain;
+	gyro_gain /= 4;
 	if (gyro_gain == 0)	gyro_gain = 1;
 
 	channels->gyro_gain = gyro_gain;
