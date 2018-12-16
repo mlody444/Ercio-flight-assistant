@@ -339,13 +339,16 @@ void ProcessPWMs(void)
 		{
 			roll = (channel_new.roll + channel_new.roll_trim_gyro) * 5.5;
 			int32_t roll_pid_value = ProcessPID(pos_y, -roll, &pid_roll);
+			roll_pid_value /= 4;
 			roll_pid_value = -roll_pid_value / channel_new.gyro_gain;
 			if (roll_pid_value > 10000)	roll = 10000;
 			else if (roll_pid_value < -10000) roll = -10000;
 			else	roll = roll_pid_value;
 
 			pitch = (channel_new.pitch + channel_new.pitch_trim_gyro) * 5.5;
+			pitch -= 500;
 			int32_t pitch_pid_value = ProcessPID(pos_x, pitch, &pid_pitch);
+			pitch_pid_value /= 4;
 			pitch_pid_value = pitch_pid_value / channel_new.gyro_gain;
 			if (pitch_pid_value > 10000)	pitch = 10000;
 			else if (pitch_pid_value < -10000) pitch = -10000;
@@ -391,8 +394,8 @@ void Read_Channels(CHANNELS *channels)
 	
 	channels->roll_trim_manual  = channel_value[5] - 992;
 	channels->pitch_trim_manual = channel_value[6] - 992;
-	channels->roll_trim_gyro    = channel_value[7] - 992;
-	channels->pitch_trim_gyro   = channel_value[8] - 992;
+	channels->roll_trim_gyro    = (channel_value[7] - 992) * 10;
+	channels->pitch_trim_gyro   = (channel_value[8] - 992) * 10;
 
 	if (channel_value[9] < 992)
 		channels->buzzer = 0;
@@ -407,15 +410,15 @@ void Read_Channels(CHANNELS *channels)
 	channels->sensitivity = channel_value[11] - 992;
 
 	uint16_t gyro_gain = (channel_value[G_GAIN] - 991)*5/41;
+	gyro_gain /= 2;
 	gyro_gain = 100 - gyro_gain;
-	gyro_gain /= 4;
 	if (gyro_gain == 0)	gyro_gain = 1;
 
 	channels->gyro_gain = gyro_gain;
 
 /* P multiplayer */
 	if (channel_value[P_GAIN] == 172)
-		channels->p_gain = 450;
+		channels->p_gain = 300;
 	else if (channel_value[P_GAIN] == 992)
 		channels->p_gain = 150;
 	else
@@ -431,9 +434,9 @@ void Read_Channels(CHANNELS *channels)
 
 /* D multiplayer */
 	if (channel_value[D_GAIN] == 172)
-		channels->d_gain = 75;
+		channels->d_gain = 200;
 	else if (channel_value[D_GAIN] == 992)
-		channels->d_gain = 25;
+		channels->d_gain = 50;
 	else
 		channels->d_gain = 0;
 
